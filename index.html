@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ThinkOS — Intelligent Waste Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --smartloop: #43B02A;
+    --bioloop: #6366F1;
+    --cleanloop: #0EA5E9;
+    --zeroloop: #F0B016;
+    --dark: #205C40;
+    --dark-deep: #1a4a34;
+    --gray: #53565A;
+    --green-light: #43B02A;
+    --green-dark: #205C40;
+    --orange: #F0B016;
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1;
+    --gray-400: #94A3B8;
+    --gray-500: #64748B;
+    --gray-600: #53565A;
+    --gray-700: #334155;
+    --gray-800: #1E293B;
+    --radius: 16px;
+  }
+
+  body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #FFFFFF;
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 40px;
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    display: flex; align-items: center;
+  }
+  .logo svg { height: 32px; width: auto; }
+  .logo-footer svg { height: 26px; width: auto; }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--gray-500);
+    font-size: 14px; font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--dark); }
+  .nav-cta {
+    background: var(--dark); color: #fff !important;
+    padding: 10px 24px; border-radius: 10px;
+    font-weight: 600; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 160px 40px 100px;
+    text-align: center;
+    max-width: 900px; margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--gray-100); border: 1px solid var(--gray-200);
+    border-radius: 100px; padding: 6px 16px;
+    font-size: 13px; font-weight: 600; color: var(--gray-600);
+    margin-bottom: 28px;
+  }
+  .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: #43B02A; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .hero h1 {
+    font-size: clamp(40px, 5.5vw, 68px);
+    font-weight: 900; letter-spacing: -2px;
+    line-height: 1.08; margin-bottom: 24px;
+  }
+  .hero h1 .gradient {
+    background: linear-gradient(135deg, #43B02A, #0EA5E9, #6366F1);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p {
+    font-size: 19px; color: var(--gray-500);
+    max-width: 620px; margin: 0 auto 40px; line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px; border-radius: 12px;
+    font-size: 15px; font-weight: 600; text-decoration: none;
+    transition: all 0.25s; cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--dark); color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+  .btn-secondary { background: var(--gray-100); color: var(--dark); border: 1px solid var(--gray-200); }
+  .btn-secondary:hover { background: var(--gray-200); }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    display: flex; justify-content: center; gap: 60px;
+    padding: 40px 40px; flex-wrap: wrap;
+    border-top: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-100);
+    margin-bottom: 60px;
+  }
+  .stat { text-align: center; }
+  .stat .number { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+  .stat .label { font-size: 13px; color: var(--gray-400); font-weight: 500; margin-top: 4px; }
+
+  /* ─── TABS SECTION ─── */
+  .products-section { max-width: 1200px; margin: 0 auto; padding: 40px 40px 100px; }
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-header h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+  .section-header p { font-size: 17px; color: var(--gray-500); max-width: 560px; margin: 0 auto; }
+
+  .tab-nav { display: flex; gap: 12px; justify-content: center; margin-bottom: 48px; flex-wrap: wrap; }
+  .tab-btn {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 26px; border-radius: 100px;
+    font-size: 14px; font-weight: 600; letter-spacing: 0.01em;
+    cursor: pointer; border: none;
+    background: var(--gray-100); color: var(--gray-600);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    position: relative; overflow: hidden;
+  }
+  .tab-btn::before {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 100px; opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .tab-btn:hover { background: var(--gray-200); transform: translateY(-1px); }
+  .tab-btn .tab-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.35s;
+  }
+  .tab-btn .tab-icon svg { width: 16px; height: 16px; transition: all 0.35s; }
+  .tab-btn[data-tab="smartloop"] .tab-icon { background: rgba(67,176,42,0.12); }
+  .tab-btn[data-tab="smartloop"] .tab-icon svg { fill: var(--smartloop); }
+  .tab-btn[data-tab="bioloop"] .tab-icon { background: rgba(99,102,241,0.12); }
+  .tab-btn[data-tab="bioloop"] .tab-icon svg { fill: var(--bioloop); }
+  .tab-btn[data-tab="cleanloop"] .tab-icon { background: rgba(14,165,233,0.12); }
+  .tab-btn[data-tab="cleanloop"] .tab-icon svg { fill: var(--cleanloop); }
+  .tab-btn[data-tab="zeroloop"] .tab-icon { background: rgba(240,176,22,0.12); }
+  .tab-btn[data-tab="zeroloop"] .tab-icon svg { fill: var(--zeroloop); }
+  .tab-btn .tab-label { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2; }
+  .tab-btn .tab-name { font-weight: 700; font-size: 14px; }
+  .tab-btn .tab-sub { font-size: 10px; font-weight: 400; opacity: 0.65; }
+
+  .tab-btn.active {
+    color: #fff; transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .tab-btn.active .tab-icon { background: rgba(255,255,255,0.2); }
+  .tab-btn.active .tab-icon svg { fill: #fff; }
+  .tab-btn.active .tab-sub { opacity: 0.8; }
+  .tab-btn[data-tab="smartloop"].active { background: var(--smartloop); }
+  .tab-btn[data-tab="bioloop"].active { background: var(--bioloop); }
+  .tab-btn[data-tab="cleanloop"].active { background: var(--cleanloop); }
+  .tab-btn[data-tab="zeroloop"].active { background: var(--zeroloop); }
+
+  .tab-content { display: none; animation: fadeSlide 0.45s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  .product-card { background: #fff; border: 1px solid var(--gray-200); border-radius: 20px; overflow: hidden; }
+  .product-hero { padding: 56px 56px 40px; position: relative; }
+  .product-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .product-card[data-product="smartloop"] .product-hero::before { background: var(--smartloop); }
+  .product-card[data-product="bioloop"] .product-hero::before { background: var(--bioloop); }
+  .product-card[data-product="cleanloop"] .product-hero::before { background: var(--cleanloop); }
+  .product-card[data-product="zeroloop"] .product-hero::before { background: var(--zeroloop); }
+
+  .product-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px; border-radius: 8px;
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;
+  }
+  .product-card[data-product="smartloop"] .product-tag { background: #D1FAE5; color: #065F46; }
+  .product-card[data-product="bioloop"] .product-tag { background: #E0E7FF; color: #3730A3; }
+  .product-card[data-product="cleanloop"] .product-tag { background: #DBEAFE; color: #1E40AF; }
+  .product-card[data-product="zeroloop"] .product-tag { background: #FEF3C7; color: #92400E; }
+
+  .product-hero h3 { font-size: 32px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .product-hero > p { font-size: 17px; color: var(--gray-500); max-width: 600px; line-height: 1.7; }
+
+  /* ═══════ DASHBOARD SNAPSHOT FRAME ═══════ */
+  .snapshot-frame {
+    margin: 32px 40px 0;
+    border-radius: 16px 16px 0 0;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    border: 1px solid var(--gray-200);
+    border-bottom: none;
+    position: relative;
+  }
+  .snapshot-link-overlay {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(15,23,42,0.0);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
+    text-decoration: none;
+  }
+  .snapshot-frame:hover .snapshot-link-overlay {
+    background: rgba(15,23,42,0.6);
+    backdrop-filter: blur(4px);
+    pointer-events: auto;
+  }
+  .snapshot-link-overlay .overlay-content {
+    opacity: 0; transform: translateY(12px) scale(0.95);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    text-align: center;
+  }
+  .snapshot-frame:hover .snapshot-link-overlay .overlay-content {
+    opacity: 1; transform: translateY(0) scale(1);
+  }
+  .overlay-cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 36px; border-radius: 14px;
+    background: #fff; color: var(--dark);
+    font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+  }
+  .overlay-cta:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+  }
+  .overlay-cta .cta-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px; font-size: 14px;
+    transition: transform 0.2s;
+  }
+  .overlay-cta:hover .cta-arrow { transform: translateX(3px); }
+  .overlay-cta[data-product="smartloop"] .cta-arrow { background: #D1FAE5; color: #065F46; }
+  .overlay-cta[data-product="bioloop"] .cta-arrow { background: #E0E7FF; color: #3730A3; }
+  .overlay-cta[data-product="cleanloop"] .cta-arrow { background: #DBEAFE; color: #1E40AF; }
+  .overlay-cta[data-product="zeroloop"] .cta-arrow { background: #FEF3C7; color: #92400E; }
+  .overlay-url {
+    display: block; margin-top: 10px;
+    font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 500;
+  }
+  .snapshot-titlebar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px;
+    background: var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .snapshot-titlebar .dot-r { width: 12px; height: 12px; border-radius: 50%; background: #EF4444; }
+  .snapshot-titlebar .dot-y { width: 12px; height: 12px; border-radius: 50%; background: #F0B016; }
+  .snapshot-titlebar .dot-g { width: 12px; height: 12px; border-radius: 50%; background: #43B02A; }
+  .snapshot-titlebar .title-url {
+    flex: 1; text-align: center;
+    font-size: 11px; color: var(--gray-400); font-weight: 500;
+    background: #fff; border-radius: 6px; padding: 4px 12px;
+    margin: 0 40px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* ═══════ SMARTLOOP DASHBOARD ═══════ */
+  .sl-dash {
+    display: flex; height: 420px; background: #FDF8F0; font-size: 12px;
+  }
+  .sl-sidebar {
+    width: 160px; min-width: 160px; background: #FEFCF7; border-right: 1px solid #E8DFD0;
+    padding: 16px 12px; display: flex; flex-direction: column; gap: 2px;
+  }
+  .sl-sidebar .sl-logo {
+    text-align: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #E8DFD0;
+  }
+  .sl-sidebar .sl-logo span { display: inline-flex; width: 36px; height: 36px; border-radius: 50%; background: #A8D5BA; color: #fff; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; }
+  .sl-sidebar .sl-logo div { font-size: 11px; font-weight: 700; color: #5A7D6A; margin-top: 4px; font-style: italic; }
+  .sl-sidebar .sl-label { font-size: 9px; font-weight: 700; color: #A8C5B0; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 4px 4px; }
+  .sl-sidebar a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 10px; border-radius: 8px; font-size: 11px;
+    color: #6B8F7B; text-decoration: none; font-weight: 500; transition: background 0.15s;
+  }
+  .sl-sidebar a.active { background: #A8D5BA; color: #fff; font-weight: 600; }
+  .sl-sidebar a:hover:not(.active) { background: rgba(168,213,186,0.2); }
+  .sl-main { flex: 1; padding: 20px 24px; overflow: hidden; }
+  .sl-main .sl-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .sl-main .sl-header h2 { font-size: 18px; font-weight: 800; color: #4A6B5A; font-style: italic; }
+  .sl-main .sl-header .sl-badges { display: flex; gap: 8px; }
+  .sl-main .sl-header .sl-badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 600; border: 1px solid; }
+  .sl-badge.streak { background: #FEE2E2; color: #DC2626; border-color: #FECACA; }
+  .sl-badge.riplets { background: #DBEAFE; color: #2563EB; border-color: #BFDBFE; }
+  .sl-badge.xp { background: #D1FAE5; color: #205C40; border-color: #A7F3D0; }
+
+  .sl-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
+  .sl-stat-card {
+    background: #FFF; border: 1px dashed #D4E5D9; border-radius: 12px;
+    padding: 14px; text-align: center;
+  }
+  .sl-stat-card .icon { font-size: 20px; margin-bottom: 4px; }
+  .sl-stat-card .val { font-size: 22px; font-weight: 800; color: #3E9B6B; }
+  .sl-stat-card .lbl { font-size: 9px; color: #8AAF9A; font-weight: 600; }
+  .sl-stat-card .sub { font-size: 8px; color: #B0C8BB; font-style: italic; margin-top: 2px; }
+
+  .sl-bottom { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+  .sl-progress-card {
+    background: #fff; border: 1px dashed #D4E5D9; border-radius: 12px; padding: 16px;
+  }
+  .sl-progress-card h4 { font-size: 13px; font-weight: 700; color: #4A6B5A; font-style: italic; margin-bottom: 4px; }
+  .sl-progress-card .sub { font-size: 9px; color: #8AAF9A; margin-bottom: 8px; }
+  .sl-progress-bar { height: 8px; background: #E8F5EC; border-radius: 4px; overflow: hidden; }
+  .sl-progress-bar .fill { height: 100%; background: linear-gradient(90deg, #6BCB8B, #3E9B6B); border-radius: 4px; width: 82%; }
+  .sl-chart-area { margin-top: 12px; height: 100px; position: relative; }
+  .sl-chart-area svg { width: 100%; height: 100%; }
+
+  .sl-activity {
+    background: #fff; border: 1px dashed #D4E5D9; border-radius: 12px; padding: 16px;
+  }
+  .sl-activity h4 { font-size: 13px; font-weight: 700; color: #4A6B5A; font-style: italic; margin-bottom: 8px; }
+  .sl-activity-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 0; border-bottom: 1px solid #F0F5F2; font-size: 10px;
+  }
+  .sl-activity-item:last-child { border-bottom: none; }
+  .sl-activity-item .act-text { color: #5A7D6A; }
+  .sl-activity-item .act-pts { color: #3E9B6B; font-weight: 700; }
+
+  /* ═══════ BIOLOOP DASHBOARD ═══════ */
+  .bl-dash {
+    display: flex; height: 420px; background: #0D1117; font-size: 12px; color: #C9D1D9;
+  }
+  .bl-sidebar {
+    width: 160px; min-width: 160px; background: #0D1117; border-right: 1px solid #21262D;
+    padding: 16px 12px; display: flex; flex-direction: column; gap: 2px;
+  }
+  .bl-sidebar .bl-logo {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #21262D;
+  }
+  .bl-sidebar .bl-logo span {
+    display: inline-flex; width: 32px; height: 32px; border-radius: 8px;
+    background: #6366F1; color: #fff; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+  }
+  .bl-sidebar .bl-logo div { font-size: 13px; font-weight: 700; color: #E6EDF3; }
+  .bl-sidebar .bl-logo small { font-size: 9px; color: #484F58; display: block; }
+  .bl-sidebar a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 8px; font-size: 11px;
+    color: #8B949E; text-decoration: none; font-weight: 500; transition: background 0.15s;
+  }
+  .bl-sidebar a.active { background: rgba(99,102,241,0.15); color: #818CF8; font-weight: 600; }
+  .bl-sidebar a:hover:not(.active) { background: #161B22; }
+  .bl-sidebar a .notif {
+    margin-left: auto; background: #DA3633; color: #fff;
+    font-size: 9px; padding: 1px 6px; border-radius: 10px; font-weight: 700;
+  }
+
+  .bl-main { flex: 1; padding: 20px 24px; overflow: hidden; }
+  .bl-main .bl-topbar { display: flex; justify-content: space-between; margin-bottom: 16px; }
+  .bl-main .bl-topbar h2 { font-size: 16px; font-weight: 700; color: #E6EDF3; }
+  .bl-main .bl-topbar .bl-date { font-size: 11px; color: #484F58; }
+
+  .bl-metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+  .bl-metric-card {
+    background: #161B22; border: 1px solid #21262D; border-radius: 10px;
+    padding: 14px;
+  }
+  .bl-metric-card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .bl-metric-card .lbl { font-size: 10px; color: #8B949E; }
+  .bl-metric-card .ico { font-size: 16px; }
+  .bl-metric-card .val { font-size: 20px; font-weight: 800; color: #E6EDF3; }
+  .bl-metric-card .chg { font-size: 9px; margin-top: 4px; }
+  .bl-metric-card .chg.up { color: #3FB950; }
+  .bl-metric-card .chg.warn { color: #D29922; }
+
+  .bl-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .bl-chart-card {
+    background: #161B22; border: 1px solid #21262D; border-radius: 10px; padding: 16px;
+  }
+  .bl-chart-card h4 { font-size: 12px; font-weight: 600; color: #E6EDF3; margin-bottom: 4px; }
+  .bl-chart-card .chart-sub { font-size: 9px; color: #484F58; margin-bottom: 12px; }
+  .bl-chart-card svg { width: 100%; }
+  .bl-legend { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .bl-legend span { display: flex; align-items: center; gap: 4px; font-size: 9px; color: #8B949E; }
+  .bl-legend span::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 2px; }
+  .bl-legend .clinical::before { background: #F97316; }
+  .bl-legend .general::before { background: #22D3EE; }
+  .bl-legend .patho::before { background: #FBBF24; }
+  .bl-legend .pharma::before { background: #818CF8; }
+
+  .bl-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .bl-list-card {
+    background: #161B22; border: 1px solid #21262D; border-radius: 10px; padding: 16px;
+  }
+  .bl-list-card .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .bl-list-card h4 { font-size: 12px; font-weight: 600; color: #E6EDF3; }
+  .bl-list-card .view-all { font-size: 9px; color: #484F58; border: 1px solid #21262D; padding: 2px 8px; border-radius: 4px; }
+  .bl-alert-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid #21262D; font-size: 11px;
+  }
+  .bl-alert-item:last-child { border-bottom: none; }
+  .bl-alert-item .dot-indicator { width: 10px; height: 10px; border-radius: 50%; }
+  .bl-alert-item .dot-indicator.yellow { background: #FBBF24; }
+  .bl-alert-item .dot-indicator.red { background: #F87171; }
+  .bl-alert-item .info { flex: 1; }
+  .bl-alert-item .name { color: #E6EDF3; font-weight: 600; }
+  .bl-alert-item .sub { color: #484F58; font-size: 9px; }
+  .bl-alert-item .pct { font-weight: 700; }
+  .bl-comp-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid #21262D; font-size: 11px;
+  }
+  .bl-comp-item:last-child { border-bottom: none; }
+  .bl-comp-item .comp-name { color: #E6EDF3; font-weight: 600; }
+  .bl-comp-item .comp-sub { color: #484F58; font-size: 9px; }
+  .bl-comp-item .comp-status { display: flex; align-items: center; gap: 6px; }
+  .bl-comp-item .comp-pct { font-weight: 700; }
+  .bl-comp-item .badge-pass { background: #0D4B32; color: #3FB950; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+  .bl-comp-item .badge-warn { background: #4B3A0D; color: #D29922; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+
+  .bl-donut-wrap { display: flex; align-items: center; justify-content: center; height: 120px; }
+
+  /* ═══════ CLEANLOOP DASHBOARD ═══════ */
+  .cl-dash {
+    display: flex; height: 420px; background: #F0F9FF; font-size: 12px; position: relative;
+  }
+  .cl-sidebar {
+    width: 200px; min-width: 200px; background: #fff; border-right: 1px solid #E0F2FE;
+    padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .cl-sidebar .cl-logo {
+    display: flex; align-items: center; gap: 8px;
+    padding-bottom: 12px; border-bottom: 1px solid #E0F2FE;
+  }
+  .cl-sidebar .cl-logo span {
+    display: inline-flex; width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, #0EA5E9, #06B6D4); color: #fff;
+    align-items: center; justify-content: center; font-weight: 800; font-size: 13px;
+  }
+  .cl-sidebar .cl-logo div { font-weight: 700; font-size: 14px; color: #0C4A6E; }
+  .cl-fleet-title { font-size: 10px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; }
+  .cl-fleet-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 8px; background: #F0F9FF;
+  }
+  .cl-fleet-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .cl-fleet-dot.active { background: #43B02A; }
+  .cl-fleet-dot.idle { background: #F0B016; }
+  .cl-fleet-dot.maint { background: #EF4444; }
+  .cl-fleet-info .name { font-size: 11px; font-weight: 600; color: #0C4A6E; }
+  .cl-fleet-info .status { font-size: 9px; color: var(--gray-400); }
+  .cl-collection-stats {
+    margin-top: auto; background: #F0F9FF; border-radius: 10px; padding: 12px;
+  }
+  .cl-collection-stats h4 { font-size: 10px; font-weight: 700; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .cl-cstat { display: flex; justify-content: space-between; padding: 4px 0; font-size: 11px; }
+  .cl-cstat .label { color: #64748B; }
+  .cl-cstat .value { font-weight: 700; color: #0C4A6E; }
+
+  .cl-map {
+    flex: 1; background:
+      radial-gradient(circle at 30% 40%, #BAE6FD 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, #A5F3FC 0%, transparent 50%),
+      linear-gradient(180deg, #E0F2FE 0%, #F0F9FF 100%);
+    position: relative; overflow: hidden;
+  }
+  .cl-map-topbar {
+    position: absolute; top: 12px; left: 12px; right: 12px;
+    display: flex; justify-content: space-between; z-index: 2;
+  }
+  .cl-map-topbar .search {
+    background: #fff; border: 1px solid #BAE6FD; border-radius: 8px;
+    padding: 6px 12px; font-size: 11px; color: #94A3B8; width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .cl-map-topbar .filters { display: flex; gap: 6px; }
+  .cl-map-topbar .filter-chip {
+    background: #fff; border: 1px solid #BAE6FD; border-radius: 6px;
+    padding: 4px 10px; font-size: 10px; font-weight: 600; color: #0284C7;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  /* Map grid lines */
+  .cl-map::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(#BAE6FD22 1px, transparent 1px),
+      linear-gradient(90deg, #BAE6FD22 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Route paths */
+  .cl-map svg.routes {
+    position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
+  }
+
+  /* Bin markers */
+  .cl-bin {
+    position: absolute; z-index: 2;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; font-weight: 700; color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    border: 2px solid #fff;
+  }
+  .cl-bin.full { background: #EF4444; }
+  .cl-bin.mid { background: #F0B016; }
+  .cl-bin.low { background: #43B02A; }
+
+  .cl-truck {
+    position: absolute; z-index: 3;
+    font-size: 18px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  .cl-map-stats {
+    position: absolute; bottom: 12px; left: 12px; right: 12px;
+    display: flex; gap: 8px; z-index: 2;
+  }
+  .cl-map-stat {
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(8px);
+    border: 1px solid #BAE6FD; border-radius: 10px;
+    padding: 10px 14px; flex: 1; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .cl-map-stat .ms-label { font-size: 9px; color: #64748B; font-weight: 600; text-transform: uppercase; }
+  .cl-map-stat .ms-val { font-size: 18px; font-weight: 800; color: #0C4A6E; }
+  .cl-map-stat .ms-chg { font-size: 9px; color: #43B02A; font-weight: 600; }
+
+  /* ═══════ ZEROLOOP DASHBOARD ═══════ */
+  .zl-dash {
+    display: flex; height: 420px; background: #18181B; font-size: 12px; color: #D4D4D8;
+  }
+  .zl-sidebar {
+    width: 180px; min-width: 180px; background: #18181B; border-right: 1px solid #27272A;
+    padding: 16px 12px; display: flex; flex-direction: column;
+  }
+  .zl-sidebar .zl-logo {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #27272A;
+  }
+  .zl-sidebar .zl-logo span {
+    display: inline-flex; width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, #F0B016, #EF4444); color: #fff;
+    align-items: center; justify-content: center; font-weight: 800; font-size: 14px;
+  }
+  .zl-sidebar .zl-logo div { font-weight: 700; font-size: 13px; color: #FAFAFA; }
+  .zl-sidebar .zl-logo small { font-size: 9px; color: #52525B; display: block; }
+  .zl-sidebar .zl-label { font-size: 9px; font-weight: 700; color: #52525B; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 6px 4px; }
+  .zl-sidebar a {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 8px; font-size: 11px;
+    color: #71717A; text-decoration: none; font-weight: 500; transition: all 0.15s;
+  }
+  .zl-sidebar a.active { background: rgba(245,158,11,0.12); color: #FBBF24; font-weight: 600; }
+  .zl-sidebar a:hover:not(.active) { background: #27272A; }
+
+  .zl-agents {
+    margin-top: auto; border-top: 1px solid #27272A; padding-top: 12px;
+  }
+  .zl-agent-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 6px; margin-bottom: 4px;
+  }
+  .zl-agent-dot { width: 6px; height: 6px; border-radius: 50%; background: #43B02A; animation: pulse 2s infinite; }
+  .zl-agent-name { font-size: 10px; color: #A1A1AA; }
+  .zl-agent-status { font-size: 9px; color: #43B02A; margin-left: auto; font-weight: 600; }
+
+  .zl-main { flex: 1; padding: 20px 24px; overflow: hidden; }
+  .zl-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .zl-topbar h2 { font-size: 16px; font-weight: 700; color: #FAFAFA; }
+  .zl-topbar .zl-period {
+    font-size: 10px; color: #52525B; background: #27272A;
+    padding: 4px 12px; border-radius: 6px; border: 1px solid #3F3F46;
+  }
+
+  .zl-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .zl-metric-card {
+    background: #27272A; border: 1px solid #3F3F46; border-radius: 10px; padding: 14px;
+  }
+  .zl-metric-card .lbl { font-size: 10px; color: #71717A; margin-bottom: 4px; }
+  .zl-metric-card .val { font-size: 22px; font-weight: 800; color: #FAFAFA; }
+  .zl-metric-card .chg { font-size: 9px; margin-top: 4px; }
+  .zl-metric-card .chg.up { color: #43B02A; }
+
+  .zl-charts { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .zl-chart-card {
+    background: #27272A; border: 1px solid #3F3F46; border-radius: 10px; padding: 16px;
+  }
+  .zl-chart-card h4 { font-size: 12px; font-weight: 600; color: #FAFAFA; margin-bottom: 12px; }
+
+  .zl-bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 100px; padding-top: 8px; }
+  .zl-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .zl-bar {
+    width: 100%; border-radius: 4px 4px 0 0; transition: height 0.3s;
+  }
+  .zl-bar-label { font-size: 9px; color: #52525B; }
+
+  .zl-sensor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .zl-sensor {
+    background: #3F3F46; border-radius: 8px; padding: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .zl-sensor .s-icon { font-size: 16px; }
+  .zl-sensor .s-name { font-size: 10px; color: #A1A1AA; }
+  .zl-sensor .s-val { font-size: 13px; font-weight: 700; color: #FAFAFA; }
+  .zl-sensor .s-status { font-size: 9px; color: #43B02A; }
+
+  .zl-bottom-bar {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .zl-action-card {
+    background: #27272A; border: 1px solid #3F3F46; border-radius: 10px; padding: 12px;
+  }
+  .zl-action-card .act-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .zl-action-card .act-head .act-icon { font-size: 14px; }
+  .zl-action-card .act-head .act-title { font-size: 11px; font-weight: 600; color: #FAFAFA; }
+  .zl-action-card .act-desc { font-size: 10px; color: #71717A; line-height: 1.5; }
+  .zl-action-card .act-tag {
+    display: inline-block; margin-top: 6px;
+    font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 600;
+  }
+  .zl-action-card .act-tag.ai { background: rgba(245,158,11,0.15); color: #FBBF24; }
+  .zl-action-card .act-tag.iot { background: rgba(16,185,129,0.15); color: #43B02A; }
+  .zl-action-card .act-tag.report { background: rgba(99,102,241,0.15); color: #818CF8; }
+
+  /* ═══════ ZL AWARD BADGES ═══════ */
+  .zl-badges-row {
+    display: flex; gap: 8px; margin-bottom: 14px;
+  }
+  .zl-award-badge {
+    flex: 1; display: flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #27272A, #3F3F46); border: 1px solid #52525B;
+    border-radius: 10px; padding: 10px 14px;
+    position: relative; overflow: hidden;
+  }
+  .zl-award-badge::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #F0B016, #EF4444, #F0B016);
+  }
+  .zl-award-badge .badge-medal {
+    width: 36px; height: 36px; min-width: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; background: rgba(245,158,11,0.15); border: 2px solid #F0B016;
+  }
+  .zl-award-badge .badge-info { flex: 1; }
+  .zl-award-badge .badge-label {
+    font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: #F0B016; margin-bottom: 2px;
+  }
+  .zl-award-badge .badge-name { font-size: 11px; font-weight: 700; color: #FAFAFA; line-height: 1.3; }
+  .zl-award-badge .badge-event { font-size: 8px; color: #71717A; margin-top: 1px; }
+  .zl-award-badge .badge-first {
+    position: absolute; top: 6px; right: 8px;
+    font-size: 8px; font-weight: 800; color: #F0B016;
+    background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px;
+    border: 1px solid rgba(245,158,11,0.3); letter-spacing: 0.5px;
+  }
+
+  /* ═══════ BLOG / NEWS SECTION ═══════ */
+  .blog-section {
+    max-width: 1200px; margin: 0 auto; padding: 80px 40px 100px;
+  }
+  .blog-section .section-header { margin-bottom: 48px; }
+  .blog-grid {
+    display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 24px;
+  }
+  .blog-card {
+    background: #fff; border: 1px solid var(--gray-200); border-radius: 16px;
+    overflow: hidden; transition: all 0.3s; text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+  }
+  .blog-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+  .blog-card-img {
+    height: 200px; position: relative; overflow: hidden;
+  }
+  .blog-card:first-child .blog-card-img { height: 260px; }
+  .blog-card-img .blog-bg {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .blog-card-img .blog-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .blog-card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .blog-card-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 12px; padding: 4px 10px; border-radius: 6px; width: fit-content;
+  }
+  .blog-card-tag.awards { background: #FEF3C7; color: #92400E; }
+  .blog-card-tag.product { background: #DBEAFE; color: #1E40AF; }
+  .blog-card-tag.impact { background: #D1FAE5; color: #065F46; }
+  .blog-card h3 { font-size: 18px; font-weight: 700; line-height: 1.4; margin-bottom: 8px; }
+  .blog-card:first-child h3 { font-size: 22px; }
+  .blog-card p { font-size: 14px; color: var(--gray-500); line-height: 1.6; flex: 1; }
+  .blog-card-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-100);
+    font-size: 12px; color: var(--gray-400);
+  }
+  .blog-card-meta .read-more { color: var(--dark); font-weight: 600; }
+
+  .award-ribbon {
+    display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .award-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 8px;
+    font-size: 11px; font-weight: 600;
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    color: #92400E; border: 1px solid #FCD34D;
+  }
+
+  /* ═══════ HOSPITALITY SUBSECTION ═══════ */
+  .hosp-subsection {
+    margin: 0 40px; padding: 48px 48px 44px;
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 50%, #FDE68A22 100%);
+    border: 1px solid #FCD34D;
+    border-radius: 20px;
+    position: relative; overflow: hidden;
+  }
+  .hosp-subsection::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
+    transform: translate(40%, -40%);
+  }
+  .hosp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 28px; position: relative; z-index: 1; flex-wrap: wrap; }
+  .hosp-header-left { flex: 1; min-width: 280px; }
+  .hosp-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 14px; border-radius: 8px; margin-bottom: 14px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+    background: #F0B016; color: #fff;
+  }
+  .hosp-header h4 { font-size: 24px; font-weight: 800; color: #78350F; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .hosp-header p { font-size: 15px; color: #92400E; line-height: 1.6; max-width: 520px; }
+  .hosp-pricing-card {
+    background: #fff; border: 2px solid #F0B016; border-radius: 16px;
+    padding: 24px 28px; text-align: center; min-width: 220px;
+    box-shadow: 0 4px 16px rgba(245,158,11,0.12);
+    position: relative; z-index: 1;
+  }
+  .hosp-pricing-card .pricing-label { font-size: 11px; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .hosp-pricing-card .pricing-tag {
+    display: inline-block; background: #FEF3C7; color: #92400E; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; border: 1px solid #FCD34D;
+  }
+  .hosp-pricing-card .pricing-value { font-size: 36px; font-weight: 900; color: #78350F; letter-spacing: -1px; line-height: 1; }
+  .hosp-pricing-card .pricing-period { font-size: 14px; font-weight: 500; color: #B45309; }
+  .hosp-pricing-card .pricing-note { font-size: 11px; color: #92400E; margin-top: 8px; line-height: 1.5; }
+  .hosp-pricing-card .pricing-cta {
+    display: inline-block; margin-top: 14px;
+    padding: 10px 28px; border-radius: 10px;
+    background: #F0B016; color: #fff; font-size: 13px; font-weight: 700;
+    text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
+  }
+  .hosp-pricing-card .pricing-cta:hover { background: #D97706; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,158,11,0.3); }
+
+  .hosp-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; position: relative; z-index: 1; }
+  .hosp-feature {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.7); border: 1px solid #FDE68A;
+    border-radius: 12px; padding: 14px 16px;
+    transition: all 0.2s;
+  }
+  .hosp-feature:hover { background: #fff; box-shadow: 0 2px 8px rgba(245,158,11,0.1); transform: translateY(-1px); }
+  .hosp-feature .hf-icon { font-size: 22px; min-width: 28px; text-align: center; }
+  .hosp-feature .hf-text { font-size: 12px; font-weight: 600; color: #78350F; line-height: 1.4; }
+  .hosp-feature .hf-sub { font-size: 10px; color: #92400E; font-weight: 400; }
+
+  .hosp-sectors { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .hosp-sector {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 10px;
+    background: rgba(255,255,255,0.6); border: 1px solid #FDE68A;
+    font-size: 12px; font-weight: 600; color: #92400E;
+    transition: all 0.2s;
+  }
+  .hosp-sector:hover { background: #fff; border-color: #F0B016; }
+  .hosp-sector .sector-icon { font-size: 16px; }
+
+  .hosp-dashboard-link {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: 24px; padding: 14px; border-radius: 12px;
+    background: rgba(255,255,255,0.5); border: 1px dashed #FCD34D;
+    text-decoration: none; color: #92400E; font-size: 13px; font-weight: 600;
+    transition: all 0.2s; position: relative; z-index: 1;
+  }
+  .hosp-dashboard-link:hover { background: #fff; border-style: solid; border-color: #F0B016; }
+  .hosp-dashboard-link .link-arrow { transition: transform 0.2s; }
+  .hosp-dashboard-link:hover .link-arrow { transform: translateX(4px); }
+
+  @media (max-width: 900px) {
+    .blog-grid { grid-template-columns: 1fr; }
+    .zl-badges-row { flex-direction: column; }
+    .hosp-subsection { margin: 0 20px; padding: 32px 24px; }
+    .hosp-header { flex-direction: column; }
+    .hosp-pricing-card { width: 100%; }
+  }
+
+  /* ═══════ BENEFITS ═══════ */
+  .benefits-section { padding: 48px 56px 56px; border-top: 1px solid var(--gray-100); }
+  .benefits-title { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-400); margin-bottom: 28px; }
+  .benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .benefit-card {
+    display: flex; gap: 16px; padding: 20px; border-radius: 14px;
+    background: var(--gray-50); border: 1px solid transparent; transition: all 0.25s;
+  }
+  .benefit-card:hover { background: #fff; border-color: var(--gray-200); box-shadow: 0 4px 12px rgba(0,0,0,0.04); transform: translateY(-2px); }
+  .benefit-icon {
+    width: 44px; height: 44px; min-width: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+  }
+  .product-card[data-product="smartloop"] .benefit-icon { background: #D1FAE5; }
+  .product-card[data-product="bioloop"] .benefit-icon { background: #E0E7FF; }
+  .product-card[data-product="cleanloop"] .benefit-icon { background: #DBEAFE; }
+  .product-card[data-product="zeroloop"] .benefit-icon { background: #FEF3C7; }
+  .benefit-text h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .benefit-text p { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
+
+  /* ─── FOOTER ─── */
+  footer { background: var(--dark); color: #fff; padding: 80px 40px 40px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; }
+  .footer-brand p { color: var(--gray-400); font-size: 14px; margin-top: 16px; line-height: 1.7; max-width: 320px; }
+  .footer-col h4 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray-400); margin-bottom: 20px; }
+  .footer-col a { display: block; color: var(--gray-300); text-decoration: none; font-size: 14px; margin-bottom: 12px; transition: color 0.2s; }
+  .footer-col a:hover { color: #fff; }
+  .footer-bottom { max-width: 1200px; margin: 60px auto 0; padding-top: 28px; border-top: 1px solid var(--gray-700); display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--gray-500); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .snapshot-frame { margin: 24px 20px 0; }
+    .sl-sidebar, .bl-sidebar, .cl-sidebar, .zl-sidebar { display: none; }
+    .product-hero { padding: 36px 24px 28px; }
+    .benefits-section { padding: 36px 24px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .stats-bar { gap: 32px; }
+    .bl-metrics { grid-template-columns: repeat(3, 1fr); }
+    .zl-metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    nav { padding: 0 20px; }
+    .hero { padding: 120px 20px 60px; }
+    .tab-btn { padding: 10px 18px; }
+    .tab-btn .tab-sub { display: none; }
+    .tab-btn .tab-icon { width: 24px; height: 24px; }
+    .tab-btn .tab-icon svg { width: 14px; height: 14px; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .benefits-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav>
+  <div class="logo">
+    <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MjEgMTc3LjIiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICM0M2FmNDk7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSI+CiAgICA8Zz4KICAgICAgPGc+CiAgICAgICAgPHBhdGggZD0iTTkwLjY4LDE1LjU4djIwLjQ3aC0zMi45NHYxMDUuOTZoLTI0Ljc5VjM2LjA0SDBWMTUuNThoOTAuNjhaIi8+CiAgICAgICAgPHBhdGggZD0iTTE4My44NCw0NS4xOWM1Ljc4LDMuMzIsMTAuMyw4LjIxLDEzLjU1LDE0LjY3LDMuMjUsNi40Niw0Ljg3LDE0LjIyLDQuODcsMjMuMjd2NTguODdoLTI0Ljh2LTU1LjQzYzAtNy45Ny0xLjk1LTE0LjEtNS44NC0xOC4zOC0zLjktNC4yOC05LjIxLTYuNDMtMTUuOTQtNi40M3MtMTIuMjUsMi4xNS0xNi4yMSw2LjQzYy0zLjk2LDQuMjktNS45MywxMC40Mi01LjkzLDE4LjM4djU1LjQzaC0yNC43OVY3Ljk3aDI0Ljc5djQ2LjE5YzMuMTktNC4zNSw3LjQ0LTcuNzYsMTIuNzUtMTAuMjMsNS4zMS0yLjQ3LDExLjIyLTMuNzEsMTcuNzEtMy43MSw3LjQ0LDAsMTQuMDUsMS42NiwxOS44NCw0Ljk4WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0yMjcuNDksMjUuNDVjLTIuODktMi44NC00LjM0LTYuMzctNC4zNC0xMC42czEuNDQtNy43Niw0LjM0LTEwLjZjMi44OS0yLjg0LDYuNTItNC4yNiwxMC44OS00LjI2czgsMS40MiwxMC44OSw0LjI2YzIuODksMi44NCw0LjM0LDYuMzcsNC4zNCwxMC42cy0xLjQ1LDcuNzYtNC4zNCwxMC42Yy0yLjg5LDIuODQtNi41Myw0LjI2LTEwLjg5LDQuMjZzLTgtMS40Mi0xMC44OS00LjI2Wk0yNTAuNjEsNDEuNjZ2MTAwLjM1aC0yNC43OVY0MS42NmgyNC43OVoiLz4KICAgICAgICA8cGF0aCBkPSJNMzU3Ljc2LDUxLjUzYzcuMiw3LjU1LDEwLjgsMTguMDgsMTAuOCwzMS42MXY1OC44N2gtMjQuOHYtNTUuNDNjMC03Ljk3LTEuOTUtMTQuMS01Ljg0LTE4LjM4LTMuOS00LjI4LTkuMjEtNi40My0xNS45NC02LjQzcy0xMi4yNSwyLjE1LTE2LjIxLDYuNDNjLTMuOTYsNC4yOS01LjkzLDEwLjQyLTUuOTMsMTguMzh2NTUuNDNoLTI0Ljc5VjQxLjY2aDI0Ljc5djEyLjVjMy4zLTQuMzUsNy41My03Ljc2LDEyLjY2LTEwLjIzLDUuMTQtMi40NywxMC43Ny0zLjcxLDE2LjkxLTMuNzEsMTEuNjksMCwyMS4xMywzLjc4LDI4LjM0LDExLjMyWiIvPgogICAgICAgIDxwYXRoIGQ9Ik00NTAuMjEsMTQyLjAxbC0zMy4zLTQyLjc1djQyLjc1aC0yNC43OVY3Ljk3aDI0Ljc5djc2LjI2bDMyLjk0LTQyLjU3aDMyLjIzbC00My4yMSw1MC4zNSw0My41Nyw0OS45OWgtMzIuMjNaIi8+CiAgICAgICAgPHBhdGggZD0iTTUyMS4wNSwxMzQuOTRjLTkuNjgtNS41NS0xNy4zNi0xMy4yNS0yMy4wMy0yMy4wOS01LjY3LTkuODQtOC41LTIwLjk4LTguNS0zMy40MnMyLjgzLTIzLjM5LDguNS0zMy4yNGM1LjY3LTkuODQsMTMuMzQtMTcuNTQsMjMuMDMtMjMuMDksOS42OC01LjU1LDIwLjMtOC4zMywzMS44OC04LjMzczIyLjM0LDIuNzgsMzEuOTcsOC4zM2M5LjYyLDUuNTYsMTcuMjQsMTMuMjUsMjIuODUsMjMuMDksNS42MSw5Ljg0LDguNDEsMjAuOTIsOC40MSwzMy4yNHMtMi44LDIzLjU4LTguNDEsMzMuNDJjLTUuNjEsOS44NC0xMy4yNiwxNy41NC0yMi45NCwyMy4wOS05LjY4LDUuNTYtMjAuMzEsOC4zMy0zMS44OCw4LjMzcy0yMi4yLTIuNzgtMzEuODgtOC4zM1pNNTcyLjU5LDExNS40N2M1LjY3LTMuNDQsMTAuMS04LjM2LDEzLjI4LTE0Ljc2LDMuMTktNi40LDQuNzgtMTMuODMsNC43OC0yMi4yOHMtMS42LTE1Ljg1LTQuNzgtMjIuMTljLTMuMTktNi4zNC03LjYyLTExLjItMTMuMjgtMTQuNTgtNS42Ny0zLjM4LTEyLjIyLTUuMDctMTkuNjYtNS4wN3MtMTQuMDIsMS42OS0xOS43NSw1LjA3Yy01LjczLDMuMzgtMTAuMTgsOC4yNC0xMy4zNywxNC41OC0zLjE5LDYuMzQtNC43OCwxMy43NC00Ljc4LDIyLjE5czEuNiwxNS44OCw0Ljc4LDIyLjI4YzMuMTksNi40LDcuNjQsMTEuMzIsMTMuMzcsMTQuNzYsNS43MywzLjQ0LDEyLjMxLDUuMTYsMTkuNzUsNS4xNnMxMy45OS0xLjcyLDE5LjY2LTUuMTZaIi8+CiAgICAgICAgPHBhdGggZD0iTTY1My45NywxMzguNzVjLTYuOTEtMy4wMi0xMi4zNy03LjM2LTE2LjM4LTEzLjA0LTQuMDItNS42Ny02LjA0LTEyLjM4LTYuMi0yMC4xMWgyNi41N2MuMzUsNS4xOSwyLjE1LDkuMyw1LjQsMTIuMzIsMy4yNSwzLjAyLDcuNyw0LjUzLDEzLjM3LDQuNTNzMTAuMzMtMS40MiwxMy42NC00LjI2YzMuMy0yLjg0LDQuOTYtNi41NSw0Ljk2LTExLjE0LDAtMy43NC0xLjEyLTYuODItMy4zNy05LjI0LTIuMjQtMi40MS01LjA1LTQuMzItOC40MS01LjcxLTMuMzctMS4zOS04LTIuOTMtMTMuOS00LjYyLTguMDMtMi40MS0xNC41NS00LjgtMTkuNTctNy4xNS01LjAyLTIuMzUtOS4zMy01LjkyLTEyLjkzLTEwLjY5LTMuNi00Ljc3LTUuNC0xMS4xNC01LjQtMTkuMTEsMC03LjQ5LDEuODMtMTQuMDEsNS40OS0xOS41NiwzLjY2LTUuNTUsOC43OS05LjgxLDE1LjQxLTEyLjc3LDYuNjEtMi45NiwxNC4xNy00LjQ0LDIyLjY3LTQuNDQsMTIuNzUsMCwyMy4xMSwzLjE3LDMxLjA4LDkuNTEsNy45Nyw2LjM0LDEyLjM3LDE1LjE5LDEzLjE5LDI2LjU0aC0yNy4yN2MtLjI0LTQuMzUtMi4wNC03Ljk0LTUuNC0xMC43OC0zLjM3LTIuODQtNy44Mi00LjI2LTEzLjM3LTQuMjYtNC44NCwwLTguNzEsMS4yNy0xMS42LDMuOC0yLjg5LDIuNTQtNC4zNCw2LjIyLTQuMzQsMTEuMDUsMCwzLjM4LDEuMDksNi4xOSwzLjI4LDguNDIsMi4xOCwyLjI0LDQuOSw0LjA1LDguMTUsNS40MywzLjI1LDEuMzksNy44MiwyLjk5LDEzLjczLDQuOCw4LjAzLDIuNDIsMTQuNTgsNC44MywxOS42Niw3LjI1LDUuMDgsMi40Miw5LjQ1LDYuMDQsMTMuMTEsMTAuODcsMy42Niw0LjgzLDUuNDksMTEuMTcsNS40OSwxOS4wMiwwLDYuNzYtMS43MSwxMy4wNC01LjE0LDE4Ljg0LTMuNDMsNS44LTguNDQsMTAuNDItMTUuMDUsMTMuODYtNi42MSwzLjQ0LTE0LjQ2LDUuMTYtMjMuNTUsNS4xNi04LjYyLDAtMTYuMzgtMS41MS0yMy4yOS00LjUzWiIvPgogICAgICA8L2c+CiAgICAgIDxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNDg5LjQzIiB5PSIxNjMuODgiIHdpZHRoPSIxMjcuMDIiIGhlaWdodD0iMTMuMzIiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" alt="ThinkOS" style="height:32px;width:auto;">
+  </div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#blog">Blog</a>
+    <a href="#about">About</a>
+    <a href="#contact" class="nav-cta">Get Started</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-badge"><span class="dot"></span> AI-Powered Waste Intelligence</div>
+  <h1>Smarter waste.<br><span class="gradient">Cleaner future.</span></h1>
+  <p>ThinkOS delivers four integrated platforms that transform how schools, hospitals, cities, and facilities manage waste — powered by real-time AI and IoT intelligence.</p>
+  <div class="hero-actions">
+    <a href="#products" class="btn btn-primary">Explore Products ↓</a>
+    <a href="#" class="btn btn-secondary">Book a Demo</a>
+  </div>
+</section>
+
+<!-- ─── STATS BAR ─── -->
+<div class="stats-bar">
+  <div class="stat"><div class="number">4</div><div class="label">Integrated Platforms</div></div>
+  <div class="stat"><div class="number">12M+</div><div class="label">Kg Waste Diverted</div></div>
+  <div class="stat"><div class="number">98%</div><div class="label">Compliance Rate</div></div>
+  <div class="stat"><div class="number">340+</div><div class="label">Active Deployments</div></div>
+</div>
+
+<!-- ─── PRODUCTS TABS ─── -->
+<section class="products-section" id="products">
+  <div class="section-header">
+    <h2>Our Platforms</h2>
+    <p>Four purpose-built platforms, one unified mission — zero waste.</p>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="smartloop" onclick="switchTab('smartloop')">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/></svg></span>
+      <span class="tab-label"><span class="tab-name">SmartLoop</span><span class="tab-sub">Schools</span></span>
+    </button>
+    <button class="tab-btn" data-tab="bioloop" onclick="switchTab('bioloop')">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M10.5 13H8v-3h2.5V7.5h3V10H16v3h-2.5v2.5h-3V13zM12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z"/></svg></span>
+      <span class="tab-label"><span class="tab-name">BioLoop</span><span class="tab-sub">Healthcare</span></span>
+    </button>
+    <button class="tab-btn" data-tab="cleanloop" onclick="switchTab('cleanloop')">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/></svg></span>
+      <span class="tab-label"><span class="tab-name">CleanLoop</span><span class="tab-sub">Government</span></span>
+    </button>
+    <button class="tab-btn" data-tab="zeroloop" onclick="switchTab('zeroloop')">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>
+      <span class="tab-label"><span class="tab-name">ZeroLoop</span><span class="tab-sub">Hospitality</span></span>
+    </button>
+  </div>
+
+  <!-- ═══════════════ SMARTLOOP ═══════════════ -->
+  <div class="tab-content active" id="tab-smartloop">
+    <div class="product-card" data-product="smartloop">
+      <div class="product-hero">
+        <div class="product-tag">🌱 SmartLoop</div>
+        <h3>School Eco-Challenge Platform</h3>
+        <p>Turn recycling into a school-wide competition. SmartLoop gamifies waste reduction with live leaderboards, class challenges, and country-level rankings — making sustainability fun for students of every age.</p>
+      </div>
+
+      <!-- Dashboard Snapshot -->
+      <div class="snapshot-frame">
+        <a href="https://lena-matter.github.io/smartloop/" target="_blank" title="" class="snapshot-link-overlay">
+          <div class="overlay-content">
+            <span class="overlay-cta" data-product="smartloop">Launch SmartLoop Dashboard <span class="cta-arrow">→</span></span>
+          </div>
+        </a>
+        <div class="snapshot-titlebar">
+          <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        </div>
+        <div class="sl-dash">
+          <div class="sl-sidebar">
+            <div class="sl-logo">
+              <span>SL</span>
+              <div>SmartLoop</div>
+            </div>
+            <div class="sl-label">My Journey</div>
+            <a class="active">📊 My Dashboard</a>
+            <a>📝 Log Activity</a>
+            <a>🏅 EcoHero Badges</a>
+            <a>🎁 Rewards Shop</a>
+            <div class="sl-label">School</div>
+            <a>🗑️ Live Bin Status</a>
+            <a>📈 Leaderboard</a>
+            <a>🌿 Green Champions</a>
+            <div class="sl-label">Global</div>
+            <a>🌍 Global Challenge</a>
+            <a>🤝 School Exchange</a>
+          </div>
+          <div class="sl-main">
+            <div class="sl-header">
+              <h2>My Earth-Saving Journey</h2>
+              <div class="sl-badges">
+                <span class="sl-badge streak">🔥 14 day streak</span>
+                <span class="sl-badge riplets">💧 1,240 Riplets</span>
+                <span class="sl-badge xp">⚡ 3,680 XP</span>
+              </div>
+            </div>
+            <div class="sl-stats">
+              <div class="sl-stat-card">
+                <div class="icon">🌳</div>
+                <div class="val">12</div>
+                <div class="lbl">Trees Saved</div>
+                <div class="sub">"That's a mini forest!"</div>
+              </div>
+              <div class="sl-stat-card">
+                <div class="icon">♻️</div>
+                <div class="val">48kg</div>
+                <div class="lbl">Waste Rescued</div>
+                <div class="sub">"Like saving a big dog's weight!"</div>
+              </div>
+              <div class="sl-stat-card">
+                <div class="icon">💨</div>
+                <div class="val">32kg</div>
+                <div class="lbl">CO₂ Saved</div>
+                <div class="sub">"That's 160km of car travel!"</div>
+              </div>
+              <div class="sl-stat-card">
+                <div class="icon">💧</div>
+                <div class="val">840L</div>
+                <div class="lbl">Water Saved</div>
+                <div class="sub">"Enough to fill 5 bathtubs!"</div>
+              </div>
+            </div>
+            <div class="sl-bottom">
+              <div class="sl-progress-card">
+                <h4>EcoHero Progress</h4>
+                <div class="sub">Level 12 → Level 13 &nbsp;·&nbsp; 3,680 / 4,500 XP &nbsp;·&nbsp; 82%</div>
+                <div class="sl-progress-bar"><div class="fill"></div></div>
+                <div class="sl-chart-area">
+                  <svg viewBox="0 0 300 80">
+                    <polyline fill="none" stroke="#A8D5BA" stroke-width="2"
+                      points="10,60 55,45 100,50 145,30 190,25 235,35 280,40"/>
+                    <polyline fill="none" stroke="#3E9B6B" stroke-width="2" stroke-dasharray="4,4"
+                      points="10,55 55,52 100,48 145,42 190,38 235,32 280,28"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="sl-activity">
+                <h4>Recent Activity</h4>
+                <div class="sl-activity-item"><span class="act-text">☕ Skipped single-use cup at canteen</span><span class="act-pts">+15 💧</span></div>
+                <div class="sl-activity-item"><span class="act-text">🛍️ Brought reusable bag from home</span><span class="act-pts">+25 💧</span></div>
+                <div class="sl-activity-item"><span class="act-text">🥬 Composted lunch scraps in FOGO bin</span><span class="act-pts">+30 💧</span></div>
+                <div class="sl-activity-item"><span class="act-text">📚 Donated old textbooks to library</span><span class="act-pts">+35 💧</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits-section">
+        <div class="benefits-title">User Benefits</div>
+        <div class="benefits-grid">
+          <div class="benefit-card"><div class="benefit-icon">🏆</div><div class="benefit-text"><h4>Gamified Leaderboards</h4><p>Class vs. class and school vs. school competitions with live rankings that motivate students to recycle more every day.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🌍</div><div class="benefit-text"><h4>Country-Level Rankings</h4><p>See how your school stacks up nationally. Compare recycling metrics with schools across the entire country.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📊</div><div class="benefit-text"><h4>Real-Time Eco Metrics</h4><p>Track waste diversion, CO₂ saved, and recycling rates through an intuitive dashboard designed for teachers and students.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🎯</div><div class="benefit-text"><h4>Challenge Campaigns</h4><p>Launch themed eco-challenges — plastic-free week, zero food waste month — to keep engagement high year-round.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🏅</div><div class="benefit-text"><h4>Badges & Rewards</h4><p>Students earn digital badges, certificates, and unlock rewards as they hit recycling milestones.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📈</div><div class="benefit-text"><h4>Teacher Admin Dashboard</h4><p>Educators get full visibility over class performance, set goals, and download sustainability reports for school boards.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ BIOLOOP ═══════════════ -->
+  <div class="tab-content" id="tab-bioloop">
+    <div class="product-card" data-product="bioloop">
+      <div class="product-hero">
+        <div class="product-tag">🧬 BioLoop</div>
+        <h3>Clinical Waste Intelligence</h3>
+        <p>Purpose-built for healthcare environments. BioLoop provides real-time tracking of clinical waste streams — sharps, pharmaceutical, infectious, and chemical — ensuring safety, compliance, and cost control.</p>
+      </div>
+
+      <div class="snapshot-frame">
+        <a href="https://lena-matter.github.io/bioloop/" target="_blank" title="" class="snapshot-link-overlay">
+          <div class="overlay-content">
+            <span class="overlay-cta" data-product="bioloop">Launch BioLoop Dashboard <span class="cta-arrow">→</span></span>
+          </div>
+        </a>
+        <div class="snapshot-titlebar">
+          <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        </div>
+        <div class="bl-dash">
+          <div class="bl-sidebar">
+            <div class="bl-logo">
+              <span>B</span>
+              <div>BioLoop<small>Clinical Waste Intelligence</small></div>
+            </div>
+            <a class="active">📊 Dashboard</a>
+            <a>🗑️ Waste Streams</a>
+            <a>🛡️ Safety <span class="notif">3</span></a>
+            <a>☣️ Contamination</a>
+            <a>👓 AR Integration</a>
+            <a>🔗 Integrations</a>
+            <a>📄 Case Studies</a>
+            <a>🗺️ Roadmap</a>
+            <a>✅ Compliance</a>
+          </div>
+          <div class="bl-main">
+            <div class="bl-topbar">
+              <h2>Dashboard</h2>
+              <span class="bl-date">Sunday 1 March 2026</span>
+            </div>
+            <div class="bl-metrics">
+              <div class="bl-metric-card">
+                <div class="top"><span class="lbl">Active Bins</span><span class="ico">🗑️</span></div>
+                <div class="val">154</div>
+                <div class="chg up">↑ 12% across 5 streams</div>
+              </div>
+              <div class="bl-metric-card">
+                <div class="top"><span class="lbl">Compliance</span><span class="ico">🛡️</span></div>
+                <div class="val">98.2%</div>
+                <div class="chg up">↑ 3% AS/NZS 3816</div>
+              </div>
+              <div class="bl-metric-card">
+                <div class="top"><span class="lbl">Sharps Alerts</span><span class="ico">⚠️</span></div>
+                <div class="val">3</div>
+                <div class="chg warn">↓ 1 above 75% fill</div>
+              </div>
+              <div class="bl-metric-card">
+                <div class="top"><span class="lbl">Air Quality</span><span class="ico">🌿</span></div>
+                <div class="val">Good</div>
+                <div class="chg warn">1 zone warning</div>
+              </div>
+              <div class="bl-metric-card">
+                <div class="top"><span class="lbl">Cost Savings</span><span class="ico">💰</span></div>
+                <div class="val">$85K</div>
+                <div class="chg up">↑ 22% annualised</div>
+              </div>
+            </div>
+            <div class="bl-charts">
+              <div class="bl-chart-card">
+                <h4>Weekly Waste Volume by Stream</h4>
+                <div class="chart-sub">kg per day across all departments</div>
+                <svg viewBox="0 0 400 100" height="90">
+                  <line x1="0" y1="25" x2="400" y2="25" stroke="#21262D" stroke-width="0.5"/>
+                  <line x1="0" y1="50" x2="400" y2="50" stroke="#21262D" stroke-width="0.5"/>
+                  <line x1="0" y1="75" x2="400" y2="75" stroke="#21262D" stroke-width="0.5"/>
+                  <polyline fill="none" stroke="#F97316" stroke-width="2" points="30,60 90,50 150,55 210,40 270,35 330,45 380,50"/>
+                  <polyline fill="none" stroke="#22D3EE" stroke-width="2" points="30,70 90,65 150,68 210,60 270,55 330,62 380,58"/>
+                  <polyline fill="none" stroke="#FBBF24" stroke-width="2" points="30,80 90,78 150,82 210,75 270,72 330,76 380,74"/>
+                  <polyline fill="none" stroke="#818CF8" stroke-width="2" points="30,85 90,83 150,86 210,82 270,80 330,84 380,82"/>
+                </svg>
+                <div class="bl-legend">
+                  <span class="clinical">Clinical</span>
+                  <span class="general">General</span>
+                  <span class="patho">Pathological</span>
+                  <span class="pharma">Pharmaceutical</span>
+                </div>
+              </div>
+              <div class="bl-chart-card">
+                <h4>Waste Composition</h4>
+                <div class="bl-donut-wrap">
+                  <svg viewBox="0 0 120 120" width="120" height="120">
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="#22D3EE" stroke-width="14" stroke-dasharray="110 204" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="#F97316" stroke-width="14" stroke-dasharray="80 234" stroke-dashoffset="-110" transform="rotate(-90 60 60)"/>
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="#818CF8" stroke-width="14" stroke-dasharray="55 259" stroke-dashoffset="-190" transform="rotate(-90 60 60)"/>
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="#FBBF24" stroke-width="14" stroke-dasharray="40 274" stroke-dashoffset="-245" transform="rotate(-90 60 60)"/>
+                    <circle cx="60" cy="60" r="50" fill="none" stroke="#F87171" stroke-width="14" stroke-dasharray="29 285" stroke-dashoffset="-285" transform="rotate(-90 60 60)"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div class="bl-bottom">
+              <div class="bl-list-card">
+                <div class="card-head"><h4>Sharps Alerts</h4><span class="view-all">View all</span></div>
+                <div class="bl-alert-item"><span class="dot-indicator yellow"></span><div class="info"><div class="name">ED Bay 3</div><div class="sub">SC-001 · 5L Yellow</div></div><span class="pct" style="color:#FBBF24">82%</span></div>
+                <div class="bl-alert-item"><span class="dot-indicator red"></span><div class="info"><div class="name">OR Theatre 1</div><div class="sub">SC-002 · 5L Yellow</div></div><span class="pct" style="color:#F87171">91%</span></div>
+                <div class="bl-alert-item"><span class="dot-indicator yellow"></span><div class="info"><div class="name">Pathology Lab</div><div class="sub">SC-004 · 10L Yellow</div></div><span class="pct" style="color:#FBBF24">76%</span></div>
+              </div>
+              <div class="bl-list-card">
+                <div class="card-head"><h4>Compliance Status</h4><span class="view-all">Full audit</span></div>
+                <div class="bl-comp-item"><div><div class="comp-name">AS/NZS 3816:2018</div><div class="comp-sub">Waste Segregation</div></div><div class="comp-status"><span class="comp-pct" style="color:#3FB950">96%</span><span class="badge-pass">pass</span></div></div>
+                <div class="bl-comp-item"><div><div class="comp-name">EPA Clinical Waste</div><div class="comp-sub">Storage & Transport</div></div><div class="comp-status"><span class="comp-pct" style="color:#3FB950">98%</span><span class="badge-pass">pass</span></div></div>
+                <div class="bl-comp-item"><div><div class="comp-name">TGA Pharmaceutical</div><div class="comp-sub">Pharma Disposal</div></div><div class="comp-status"><span class="comp-pct" style="color:#D29922">82%</span><span class="badge-warn">warning</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits-section">
+        <div class="benefits-title">User Benefits</div>
+        <div class="benefits-grid">
+          <div class="benefit-card"><div class="benefit-icon">🛡️</div><div class="benefit-text"><h4>Full Regulatory Compliance</h4><p>Automated tracking against HTM 07-01, EPA, and local regulations with real-time compliance scoring and audit trails.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">⚗️</div><div class="benefit-text"><h4>Multi-Stream Waste Tracking</h4><p>Monitor sharps, pharmaceutical, infectious, chemical, and general clinical waste — each with dedicated dashboards.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🚨</div><div class="benefit-text"><h4>Safety Incident Alerts</h4><p>Instant notifications for segregation errors, overfilled containers, or missed collections — preventing exposure risks.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📋</div><div class="benefit-text"><h4>Duty of Care Documentation</h4><p>Automated consignment notes, transfer records, and chain-of-custody logs for every waste movement.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">💰</div><div class="benefit-text"><h4>Cost Analytics</h4><p>Identify waste reduction opportunities. Compare departmental costs and benchmark against similar healthcare facilities.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🔄</div><div class="benefit-text"><h4>Smart Collection Scheduling</h4><p>AI-optimized pickup schedules based on fill levels and waste type urgency — reducing unnecessary collections by up to 30%.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CLEANLOOP ═══════════════ -->
+  <div class="tab-content" id="tab-cleanloop">
+    <div class="product-card" data-product="cleanloop">
+      <div class="product-hero">
+        <div class="product-tag">🗺️ CleanLoop</div>
+        <h3>Smart City Waste Collection</h3>
+        <p>Optimize municipal waste operations with AI-powered route planning, IoT-connected bins, and real-time fleet tracking. CleanLoop helps cities collect more waste with fewer trucks and less fuel.</p>
+      </div>
+
+      <div class="snapshot-frame">
+        <a href="https://lena-matter.github.io/cleanloop/" target="_blank" title="" class="snapshot-link-overlay">
+          <div class="overlay-content">
+            <span class="overlay-cta" data-product="cleanloop">Launch CleanLoop Dashboard <span class="cta-arrow">→</span></span>
+          </div>
+        </a>
+        <div class="snapshot-titlebar">
+          <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        </div>
+        <div class="cl-dash">
+          <div class="cl-sidebar">
+            <div class="cl-logo">
+              <span>CL</span>
+              <div>CleanLoop</div>
+            </div>
+            <div class="cl-fleet-title">Fleet Status</div>
+            <div class="cl-fleet-item"><span class="cl-fleet-dot active"></span><div class="cl-fleet-info"><div class="name">Truck CL-01</div><div class="status">Route A · 67% complete</div></div></div>
+            <div class="cl-fleet-item"><span class="cl-fleet-dot active"></span><div class="cl-fleet-info"><div class="name">Truck CL-02</div><div class="status">Route B · 43% complete</div></div></div>
+            <div class="cl-fleet-item"><span class="cl-fleet-dot idle"></span><div class="cl-fleet-info"><div class="name">Truck CL-03</div><div class="status">Depot · Idle</div></div></div>
+            <div class="cl-fleet-item"><span class="cl-fleet-dot active"></span><div class="cl-fleet-info"><div class="name">Truck CL-04</div><div class="status">Route C · 89% complete</div></div></div>
+            <div class="cl-fleet-item"><span class="cl-fleet-dot maint"></span><div class="cl-fleet-info"><div class="name">Truck CL-05</div><div class="status">Maintenance</div></div></div>
+            <div class="cl-collection-stats">
+              <h4>Today's Stats</h4>
+              <div class="cl-cstat"><span class="label">Bins Collected</span><span class="value">342 / 480</span></div>
+              <div class="cl-cstat"><span class="label">Distance</span><span class="value">127 km</span></div>
+              <div class="cl-cstat"><span class="label">Fuel Used</span><span class="value">68L</span></div>
+              <div class="cl-cstat"><span class="label">Avg Fill Level</span><span class="value">72%</span></div>
+            </div>
+          </div>
+          <div class="cl-map">
+            <div class="cl-map-topbar">
+              <div class="search">🔍 Search location or bin ID...</div>
+              <div class="filters">
+                <span class="filter-chip">All Bins</span>
+                <span class="filter-chip">Routes</span>
+                <span class="filter-chip">Alerts</span>
+              </div>
+            </div>
+            <svg class="routes" viewBox="0 0 600 400">
+              <path d="M80,120 Q150,80 220,140 T380,100 T520,180" fill="none" stroke="#0EA5E9" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.6"/>
+              <path d="M60,250 Q180,200 280,260 T480,220" fill="none" stroke="#43B02A" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.6"/>
+              <path d="M120,340 Q250,280 350,320 T520,300" fill="none" stroke="#F0B016" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.6"/>
+            </svg>
+            <span class="cl-bin full" style="left:18%;top:25%">!</span>
+            <span class="cl-bin mid" style="left:28%;top:18%"></span>
+            <span class="cl-bin low" style="left:38%;top:30%"></span>
+            <span class="cl-bin low" style="left:50%;top:22%"></span>
+            <span class="cl-bin full" style="left:60%;top:28%"></span>
+            <span class="cl-bin mid" style="left:72%;top:20%"></span>
+            <span class="cl-bin low" style="left:15%;top:55%"></span>
+            <span class="cl-bin mid" style="left:30%;top:50%"></span>
+            <span class="cl-bin low" style="left:48%;top:55%"></span>
+            <span class="cl-bin full" style="left:65%;top:48%"></span>
+            <span class="cl-bin low" style="left:80%;top:52%"></span>
+            <span class="cl-bin mid" style="left:22%;top:72%"></span>
+            <span class="cl-bin low" style="left:42%;top:70%"></span>
+            <span class="cl-bin mid" style="left:58%;top:68%"></span>
+            <span class="cl-bin low" style="left:75%;top:65%"></span>
+            <span class="cl-truck" style="left:35%;top:28%">🚛</span>
+            <span class="cl-truck" style="left:55%;top:52%">🚛</span>
+            <span class="cl-truck" style="left:40%;top:68%">🚛</span>
+            <div class="cl-map-stats">
+              <div class="cl-map-stat"><div class="ms-label">Route Efficiency</div><div class="ms-val">94%</div><div class="ms-chg">↑ 8% optimized</div></div>
+              <div class="cl-map-stat"><div class="ms-label">IoT Bins Online</div><div class="ms-val">18.4K</div><div class="ms-chg">↑ 2.1K deployed</div></div>
+              <div class="cl-map-stat"><div class="ms-label">Fuel Saved</div><div class="ms-val">37%</div><div class="ms-chg">↑ vs. baseline</div></div>
+              <div class="cl-map-stat"><div class="ms-label">CO₂ Reduced</div><div class="ms-val">12.4t</div><div class="ms-chg">↑ this month</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits-section">
+        <div class="benefits-title">User Benefits</div>
+        <div class="benefits-grid">
+          <div class="benefit-card"><div class="benefit-icon">🗺️</div><div class="benefit-text"><h4>AI Route Optimization</h4><p>Dynamic route planning that factors in bin fill levels, traffic, and vehicle capacity — reducing collection time by up to 35%.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📡</div><div class="benefit-text"><h4>IoT Bin Monitoring</h4><p>Real-time fill-level sensors across the city. No more overflowing bins or wasted trips to empty containers.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🚛</div><div class="benefit-text"><h4>Fleet Tracking & Management</h4><p>Live GPS tracking of every vehicle with maintenance schedules, driver performance, and fuel consumption analytics.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📱</div><div class="benefit-text"><h4>Citizen Reporting App</h4><p>Residents report missed collections, illegal dumping, or damaged bins — automatically routed to the nearest crew.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">⛽</div><div class="benefit-text"><h4>Carbon Footprint Reduction</h4><p>Fewer routes, less fuel, lower emissions. Track your city's environmental impact with real-time carbon dashboards.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📊</div><div class="benefit-text"><h4>City-Wide Analytics</h4><p>Zone-level heatmaps showing waste generation patterns, seasonal trends, and infrastructure planning insights.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ ZEROLOOP ═══════════════ -->
+  <div class="tab-content" id="tab-zeroloop">
+    <div class="product-card" data-product="zeroloop">
+      <div class="product-hero">
+        <div class="product-tag">⚡ ZeroLoop</div>
+        <h3>Facilities Waste Management</h3>
+        <p>AI agents and IoT sensors working together to drive your facility toward zero waste. ZeroLoop provides intelligent tracking, predictive analytics, and automated reporting for commercial and industrial environments.</p>
+      </div>
+
+      <div class="snapshot-frame">
+        <a href="https://lena-matter.github.io/zeroloop/" target="_blank" title="" class="snapshot-link-overlay">
+          <div class="overlay-content">
+            <span class="overlay-cta" data-product="zeroloop">Launch ZeroLoop Dashboard <span class="cta-arrow">→</span></span>
+          </div>
+        </a>
+        <div class="snapshot-titlebar">
+          <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        </div>
+        <div class="zl-dash">
+          <div class="zl-sidebar">
+            <div class="zl-logo">
+              <span>ZL</span>
+              <div>ZeroLoop<small>Facilities Intelligence</small></div>
+            </div>
+            <div class="zl-label">Overview</div>
+            <a class="active">📊 Dashboard</a>
+            <a>🗑️ Waste Streams</a>
+            <a>📡 IoT Sensors</a>
+            <a>📈 Analytics</a>
+            <div class="zl-label">Operations</div>
+            <a>🚛 Collections</a>
+            <a>📋 Compliance</a>
+            <a>📄 ESG Reports</a>
+            <div class="zl-agents">
+              <div class="zl-label">AI Agents</div>
+              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Sorting Agent</span><span class="zl-agent-status">Active</span></div>
+              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Prediction Agent</span><span class="zl-agent-status">Active</span></div>
+              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Compliance Agent</span><span class="zl-agent-status">Active</span></div>
+              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Report Agent</span><span class="zl-agent-status">Active</span></div>
+            </div>
+          </div>
+          <div class="zl-main">
+            <div class="zl-topbar">
+              <h2>Facilities Dashboard</h2>
+              <span class="zl-period">📅 March 2026</span>
+            </div>
+            <div class="zl-metrics">
+              <div class="zl-metric-card"><div class="lbl">Diversion Rate</div><div class="val">89%</div><div class="chg up">↑ 14% this quarter</div></div>
+              <div class="zl-metric-card"><div class="lbl">AI Agents Active</div><div class="val">24</div><div class="chg up">Monitoring 24/7</div></div>
+              <div class="zl-metric-card"><div class="lbl">IoT Sensors</div><div class="val">186</div><div class="chg up">↑ 12 new deployed</div></div>
+              <div class="zl-metric-card"><div class="lbl">Annual Savings</div><div class="val">£128K</div><div class="chg up">↑ 22% YoY</div></div>
+            </div>
+            <div class="zl-badges-row">
+              <div class="zl-award-badge">
+                <div class="badge-medal">🏆</div>
+                <div class="badge-info">
+                  <div class="badge-label">1st Place</div>
+                  <div class="badge-name">MarTech Collective Prize</div>
+                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
+                </div>
+                <span class="badge-first">FIRST</span>
+              </div>
+              <div class="zl-award-badge">
+                <div class="badge-medal">👑</div>
+                <div class="badge-info">
+                  <div class="badge-label">1st Place</div>
+                  <div class="badge-name">People's Choice Award</div>
+                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
+                </div>
+                <span class="badge-first">FIRST</span>
+              </div>
+              <div class="zl-award-badge">
+                <div class="badge-medal">🥇</div>
+                <div class="badge-info">
+                  <div class="badge-label">1st Place</div>
+                  <div class="badge-name">Winner — Hospitality Category</div>
+                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
+                </div>
+                <span class="badge-first">FIRST</span>
+              </div>
+            </div>
+            <div class="zl-charts">
+              <div class="zl-chart-card">
+                <h4>Weekly Waste by Category (tonnes)</h4>
+                <div class="zl-bar-chart">
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:60px;background:#F0B016"></div><div class="zl-bar-label">Mon</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:48px;background:#F0B016"></div><div class="zl-bar-label">Tue</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:72px;background:#F0B016"></div><div class="zl-bar-label">Wed</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:55px;background:#F0B016"></div><div class="zl-bar-label">Thu</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:80px;background:#F0B016"></div><div class="zl-bar-label">Fri</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:35px;background:#F0B016"></div><div class="zl-bar-label">Sat</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:20px;background:#F0B016"></div><div class="zl-bar-label">Sun</div></div>
+                </div>
+              </div>
+              <div class="zl-chart-card">
+                <h4>IoT Sensor Status</h4>
+                <div class="zl-sensor-grid">
+                  <div class="zl-sensor"><span class="s-icon">🌡️</span><div><div class="s-name">Temperature</div><div class="s-val">22.4°C</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">💧</span><div><div class="s-name">Humidity</div><div class="s-val">45%</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">⚖️</span><div><div class="s-name">Weight Sensors</div><div class="s-val">98% up</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">📡</span><div><div class="s-name">Fill Sensors</div><div class="s-val">186 online</div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="zl-bottom-bar">
+              <div class="zl-action-card">
+                <div class="act-head"><span class="act-icon">🤖</span><span class="act-title">AI Insight</span></div>
+                <div class="act-desc">Sorting efficiency up 8% this week. Paper contamination down in Zone B.</div>
+                <span class="act-tag ai">AI Agent</span>
+              </div>
+              <div class="zl-action-card">
+                <div class="act-head"><span class="act-icon">📡</span><span class="act-title">IoT Alert</span></div>
+                <div class="act-desc">Compactor #4 reaching capacity. Scheduled collection moved to 2pm.</div>
+                <span class="act-tag iot">IoT Sensor</span>
+              </div>
+              <div class="zl-action-card">
+                <div class="act-head"><span class="act-icon">📊</span><span class="act-title">ESG Update</span></div>
+                <div class="act-desc">Q1 2026 sustainability report ready for review. GRI-aligned metrics generated.</div>
+                <span class="act-tag report">Report</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits-section">
+        <div class="benefits-title">User Benefits</div>
+        <div class="benefits-grid">
+          <div class="benefit-card"><div class="benefit-icon">🤖</div><div class="benefit-text"><h4>AI Waste Agents</h4><p>Autonomous AI agents analyze waste patterns, suggest optimizations, and automate sorting recommendations in real time.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📡</div><div class="benefit-text"><h4>IoT Sensor Network</h4><p>Connected sensors on every bin, compactor, and dumpster. Know exactly what's full, what's contaminated, and what's trending.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🔮</div><div class="benefit-text"><h4>Predictive Analytics</h4><p>Forecast waste volumes by type and area. Plan staffing, hauler schedules, and budgets weeks in advance.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📑</div><div class="benefit-text"><h4>Automated ESG Reporting</h4><p>One-click sustainability reports aligned with GRI, SASB, and CDP frameworks — ready for stakeholders and regulators.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🏭</div><div class="benefit-text"><h4>Multi-Site Management</h4><p>Manage waste across all your facilities from a single dashboard. Compare sites, share best practices, and set unified targets.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">♻️</div><div class="benefit-text"><h4>Zero Waste Roadmap</h4><p>AI-generated action plans with milestone tracking to guide your facility from current state to zero-waste certification.</p></div></div>
+        </div>
+      </div>
+
+      <!-- ═══ HOSPITALITY SUBSECTION ═══ -->
+      <div style="padding: 0 0 56px;">
+        <div class="hosp-subsection">
+          <div class="hosp-header">
+            <div class="hosp-header-left">
+              <div class="hosp-badge">☕ Hospitality Edition</div>
+              <h4>ZeroLoop for Hospitality &amp; Food Vendors</h4>
+              <p>A streamlined version of ZeroLoop purpose-built for cafes, restaurants, event caterers, and food market vendors. On-demand food waste collection powered by smart sensor lids and automated carbon reporting.</p>
+            </div>
+            <div class="hosp-pricing-card">
+              <div class="pricing-label">Hospitality Pricing</div>
+              <div class="pricing-tag">Special Rate</div>
+              <div class="pricing-value">$49<span class="pricing-period">/mo</span></div>
+              <div class="pricing-note">Per venue · Includes ZeroLid sensor<br>+ carbon reporting dashboard</div>
+              <a href="#contact" class="pricing-cta">Get Started →</a>
+            </div>
+          </div>
+
+          <div class="hosp-features">
+            <div class="hosp-feature">
+              <span class="hf-icon">🫙</span>
+              <div><div class="hf-text">ZeroLids Smart Sensor</div><div class="hf-sub">100% recycled ocean plastic lids with fill detection</div></div>
+            </div>
+            <div class="hosp-feature">
+              <span class="hf-icon">📲</span>
+              <div><div class="hf-text">App-Driven Pickups</div><div class="hf-sub">Schedule on-demand collections in two taps</div></div>
+            </div>
+            <div class="hosp-feature">
+              <span class="hf-icon">📍</span>
+              <div><div class="hf-text">Real-Time GPS Tracking</div><div class="hf-sub">Know exactly when your collection arrives</div></div>
+            </div>
+            <div class="hosp-feature">
+              <span class="hf-icon">📊</span>
+              <div><div class="hf-text">Carbon Reporting</div><div class="hf-sub">Automated ESG metrics for councils &amp; compliance</div></div>
+            </div>
+            <div class="hosp-feature">
+              <span class="hf-icon">🌿</span>
+              <div><div class="hf-text">Composting Network</div><div class="hf-sub">Connected to local farms &amp; community gardens</div></div>
+            </div>
+            <div class="hosp-feature">
+              <span class="hf-icon">🏆</span>
+              <div><div class="hf-text">Award-Winning Tech</div><div class="hf-sub">Winner — Hospitality Category, Food Waste Challenge 2025</div></div>
+            </div>
+          </div>
+
+          <div class="hosp-sectors">
+            <span class="hosp-sector"><span class="sector-icon">🍽️</span> Restaurants</span>
+            <span class="hosp-sector"><span class="sector-icon">☕</span> Cafes</span>
+            <span class="hosp-sector"><span class="sector-icon">🏨</span> Hotels</span>
+            <span class="hosp-sector"><span class="sector-icon">🎪</span> Event Vendors</span>
+            <span class="hosp-sector"><span class="sector-icon">🛒</span> Food Markets</span>
+            <span class="hosp-sector"><span class="sector-icon">✈️</span> Airline Catering</span>
+            <span class="hosp-sector"><span class="sector-icon">🍕</span> Food Courts</span>
+          </div>
+
+          <a href="https://lena-matter.github.io/zeroloop/" target="_blank" title="" class="hosp-dashboard-link">
+            🖥️ View the ZeroLoop Hospitality Platform <span class="link-arrow">→</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- ─── BLOG / NEWS ─── -->
+<section class="blog-section" id="blog">
+  <div class="section-header">
+    <h2>Latest News</h2>
+    <p>Updates, milestones, and stories from the ThinkOS ecosystem.</p>
+  </div>
+  <div class="blog-grid">
+    <!-- Featured: Awards Article -->
+    <a href="https://www.zeroloop.live/news/we-just-closed-the-loop-with-3-awards" target="_blank" class="blog-card">
+      <div class="blog-card-img" style="background: linear-gradient(135deg, #18181B 0%, #27272A 50%, #F0B01622 100%);">
+        <div class="blog-overlay">
+          <div style="text-align:center; padding: 20px;">
+            <div style="font-size: 48px; margin-bottom: 12px;">🏆🏆🏆</div>
+            <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+              <span class="award-chip">🥇 MarTech Collective Prize</span>
+              <span class="award-chip">👑 People's Choice Award</span>
+              <span class="award-chip">🏆 Winner — Hospitality</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card-body">
+        <span class="blog-card-tag awards">🏆 Awards</span>
+        <h3>We Just Closed the Loop with 3 Awards!</h3>
+        <p>ZeroLoop won three awards at the Melbourne-Bandung Food Waste Challenge 2025 — the MarTech Collective Prize, People's Choice Award, and Winner of the Hospitality Category. IoT Team Leader Ciaran O'Reilly showcased our integrated platform that transforms food waste collection and reporting.</p>
+        <div class="blog-card-meta">
+          <span>Jul 1, 2025</span>
+          <span class="read-more">Read more →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Blog Card 2 -->
+    <div class="blog-card">
+      <div class="blog-card-img" style="background: linear-gradient(135deg, #0EA5E9, #06B6D4);">
+        <div class="blog-overlay">
+          <div style="font-size: 56px;">🏙️</div>
+        </div>
+      </div>
+      <div class="blog-card-body">
+        <span class="blog-card-tag product">🚀 Product</span>
+        <h3>CleanLoop Launches IoT Bin Network Across 3 Cities</h3>
+        <p>Our smart city platform is now live with 18,400+ IoT-connected bins, delivering real-time fill monitoring and AI route optimization.</p>
+        <div class="blog-card-meta">
+          <span>Feb 14, 2026</span>
+          <span class="read-more">Read more →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Card 3 -->
+    <div class="blog-card">
+      <div class="blog-card-img" style="background: linear-gradient(135deg, #43B02A, #205C40);">
+        <div class="blog-overlay">
+          <div style="font-size: 56px;">🌱</div>
+        </div>
+      </div>
+      <div class="blog-card-body">
+        <span class="blog-card-tag impact">🌍 Impact</span>
+        <h3>12 Million Kg of Waste Diverted — And Counting</h3>
+        <p>Across all four platforms, the ThinkOS ecosystem has now diverted over 12 million kilograms of waste from landfill.</p>
+        <div class="blog-card-meta">
+          <span>Jan 20, 2026</span>
+          <span class="read-more">Read more →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo logo-footer"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iTGF5ZXJfMiIgZGF0YS1uYW1lPSJMYXllciAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA3MjEgMTc3LjIiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICM0M2FmNDk7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxnIGlkPSJMYXllcl8xLTIiIGRhdGEtbmFtZT0iTGF5ZXIgMSIgZmlsbD0iI0ZGRkZGRiI+CiAgICA8Zz4KICAgICAgPGc+CiAgICAgICAgPHBhdGggZD0iTTkwLjY4LDE1LjU4djIwLjQ3aC0zMi45NHYxMDUuOTZoLTI0Ljc5VjM2LjA0SDBWMTUuNThoOTAuNjhaIi8+CiAgICAgICAgPHBhdGggZD0iTTE4My44NCw0NS4xOWM1Ljc4LDMuMzIsMTAuMyw4LjIxLDEzLjU1LDE0LjY3LDMuMjUsNi40Niw0Ljg3LDE0LjIyLDQuODcsMjMuMjd2NTguODdoLTI0Ljh2LTU1LjQzYzAtNy45Ny0xLjk1LTE0LjEtNS44NC0xOC4zOC0zLjktNC4yOC05LjIxLTYuNDMtMTUuOTQtNi40M3MtMTIuMjUsMi4xNS0xNi4yMSw2LjQzYy0zLjk2LDQuMjktNS45MywxMC40Mi01LjkzLDE4LjM4djU1LjQzaC0yNC43OVY3Ljk3aDI0Ljc5djQ2LjE5YzMuMTktNC4zNSw3LjQ0LTcuNzYsMTIuNzUtMTAuMjMsNS4zMS0yLjQ3LDExLjIyLTMuNzEsMTcuNzEtMy43MSw3LjQ0LDAsMTQuMDUsMS42NiwxOS44NCw0Ljk4WiIvPgogICAgICAgIDxwYXRoIGQ9Ik0yMjcuNDksMjUuNDVjLTIuODktMi44NC00LjM0LTYuMzctNC4zNC0xMC42czEuNDQtNy43Niw0LjM0LTEwLjZjMi44OS0yLjg0LDYuNTItNC4yNiwxMC44OS00LjI2czgsMS40MiwxMC44OSw0LjI2YzIuODksMi44NCw0LjM0LDYuMzcsNC4zNCwxMC42cy0xLjQ1LDcuNzYtNC4zNCwxMC42Yy0yLjg5LDIuODQtNi41Myw0LjI2LTEwLjg5LDQuMjZzLTgtMS40Mi0xMC44OS00LjI2Wk0yNTAuNjEsNDEuNjZ2MTAwLjM1aC0yNC43OVY0MS42NmgyNC43OVoiLz4KICAgICAgICA8cGF0aCBkPSJNMzU3Ljc2LDUxLjUzYzcuMiw3LjU1LDEwLjgsMTguMDgsMTAuOCwzMS42MXY1OC44N2gtMjQuOHYtNTUuNDNjMC03Ljk3LTEuOTUtMTQuMS01Ljg0LTE4LjM4LTMuOS00LjI4LTkuMjEtNi40My0xNS45NC02LjQzcy0xMi4yNSwyLjE1LTE2LjIxLDYuNDNjLTMuOTYsNC4yOS01LjkzLDEwLjQyLTUuOTMsMTguMzh2NTUuNDNoLTI0Ljc5VjQxLjY2aDI0Ljc5djEyLjVjMy4zLTQuMzUsNy41My03Ljc2LDEyLjY2LTEwLjIzLDUuMTQtMi40NywxMC43Ny0zLjcxLDE2LjkxLTMuNzEsMTEuNjksMCwyMS4xMywzLjc4LDI4LjM0LDExLjMyWiIvPgogICAgICAgIDxwYXRoIGQ9Ik00NTAuMjEsMTQyLjAxbC0zMy4zLTQyLjc1djQyLjc1aC0yNC43OVY3Ljk3aDI0Ljc5djc2LjI2bDMyLjk0LTQyLjU3aDMyLjIzbC00My4yMSw1MC4zNSw0My41Nyw0OS45OWgtMzIuMjNaIi8+CiAgICAgICAgPHBhdGggZD0iTTUyMS4wNSwxMzQuOTRjLTkuNjgtNS41NS0xNy4zNi0xMy4yNS0yMy4wMy0yMy4wOS01LjY3LTkuODQtOC41LTIwLjk4LTguNS0zMy40MnMyLjgzLTIzLjM5LDguNS0zMy4yNGM1LjY3LTkuODQsMTMuMzQtMTcuNTQsMjMuMDMtMjMuMDksOS42OC01LjU1LDIwLjMtOC4zMywzMS44OC04LjMzczIyLjM0LDIuNzgsMzEuOTcsOC4zM2M5LjYyLDUuNTYsMTcuMjQsMTMuMjUsMjIuODUsMjMuMDksNS42MSw5Ljg0LDguNDEsMjAuOTIsOC40MSwzMy4yNHMtMi44LDIzLjU4LTguNDEsMzMuNDJjLTUuNjEsOS44NC0xMy4yNiwxNy41NC0yMi45NCwyMy4wOS05LjY4LDUuNTYtMjAuMzEsOC4zMy0zMS44OCw4LjMzcy0yMi4yLTIuNzgtMzEuODgtOC4zM1pNNTcyLjU5LDExNS40N2M1LjY3LTMuNDQsMTAuMS04LjM2LDEzLjI4LTE0Ljc2LDMuMTktNi40LDQuNzgtMTMuODMsNC43OC0yMi4yOHMtMS42LTE1Ljg1LTQuNzgtMjIuMTljLTMuMTktNi4zNC03LjYyLTExLjItMTMuMjgtMTQuNTgtNS42Ny0zLjM4LTEyLjIyLTUuMDctMTkuNjYtNS4wN3MtMTQuMDIsMS42OS0xOS43NSw1LjA3Yy01LjczLDMuMzgtMTAuMTgsOC4yNC0xMy4zNywxNC41OC0zLjE5LDYuMzQtNC43OCwxMy43NC00Ljc4LDIyLjE5czEuNiwxNS44OCw0Ljc4LDIyLjI4YzMuMTksNi40LDcuNjQsMTEuMzIsMTMuMzcsMTQuNzYsNS43MywzLjQ0LDEyLjMxLDUuMTYsMTkuNzUsNS4xNnMxMy45OS0xLjcyLDE5LjY2LTUuMTZaIi8+CiAgICAgICAgPHBhdGggZD0iTTY1My45NywxMzguNzVjLTYuOTEtMy4wMi0xMi4zNy03LjM2LTE2LjM4LTEzLjA0LTQuMDItNS42Ny02LjA0LTEyLjM4LTYuMi0yMC4xMWgyNi41N2MuMzUsNS4xOSwyLjE1LDkuMyw1LjQsMTIuMzIsMy4yNSwzLjAyLDcuNyw0LjUzLDEzLjM3LDQuNTNzMTAuMzMtMS40MiwxMy42NC00LjI2YzMuMy0yLjg0LDQuOTYtNi41NSw0Ljk2LTExLjE0LDAtMy43NC0xLjEyLTYuODItMy4zNy05LjI0LTIuMjQtMi40MS01LjA1LTQuMzItOC40MS01LjcxLTMuMzctMS4zOS04LTIuOTMtMTMuOS00LjYyLTguMDMtMi40MS0xNC41NS00LjgtMTkuNTctNy4xNS01LjAyLTIuMzUtOS4zMy01LjkyLTEyLjkzLTEwLjY5LTMuNi00Ljc3LTUuNC0xMS4xNC01LjQtMTkuMTEsMC03LjQ5LDEuODMtMTQuMDEsNS40OS0xOS41NiwzLjY2LTUuNTUsOC43OS05LjgxLDE1LjQxLTEyLjc3LDYuNjEtMi45NiwxNC4xNy00LjQ0LDIyLjY3LTQuNDQsMTIuNzUsMCwyMy4xMSwzLjE3LDMxLjA4LDkuNTEsNy45Nyw2LjM0LDEyLjM3LDE1LjE5LDEzLjE5LDI2LjU0aC0yNy4yN2MtLjI0LTQuMzUtMi4wNC03Ljk0LTUuNC0xMC43OC0zLjM3LTIuODQtNy44Mi00LjI2LTEzLjM3LTQuMjYtNC44NCwwLTguNzEsMS4yNy0xMS42LDMuOC0yLjg5LDIuNTQtNC4zNCw2LjIyLTQuMzQsMTEuMDUsMCwzLjM4LDEuMDksNi4xOSwzLjI4LDguNDIsMi4xOCwyLjI0LDQuOSw0LjA1LDguMTUsNS40MywzLjI1LDEuMzksNy44MiwyLjk5LDEzLjczLDQuOCw4LjAzLDIuNDIsMTQuNTgsNC44MywxOS42Niw3LjI1LDUuMDgsMi40Miw5LjQ1LDYuMDQsMTMuMTEsMTAuODcsMy42Niw0LjgzLDUuNDksMTEuMTcsNS40OSwxOS4wMiwwLDYuNzYtMS43MSwxMy4wNC01LjE0LDE4Ljg0LTMuNDMsNS44LTguNDQsMTAuNDItMTUuMDUsMTMuODYtNi42MSwzLjQ0LTE0LjQ2LDUuMTYtMjMuNTUsNS4xNi04LjYyLDAtMTYuMzgtMS41MS0yMy4yOS00LjUzWiIvPgogICAgICA8L2c+CiAgICAgIDxyZWN0IGNsYXNzPSJjbHMtMSIgeD0iNDg5LjQzIiB5PSIxNjMuODgiIHdpZHRoPSIxMjcuMDIiIGhlaWdodD0iMTMuMzIiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPg==" alt="ThinkOS" style="height:26px;width:auto;"></div>
+      <p>AI-powered waste intelligence for a cleaner, smarter, and more sustainable world.</p>
+    </div>
+    <div class="footer-col"><h4>Products</h4><a href="#">SmartLoop</a><a href="#">BioLoop</a><a href="#">CleanLoop</a><a href="#">ZeroLoop</a></div>
+    <div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Press</a><a href="#">Contact</a></div>
+    <div class="footer-col"><h4>Resources</h4><a href="#">Documentation</a><a href="#">Case Studies</a><a href="#">Blog</a><a href="#">Support</a></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 ThinkOS. All rights reserved.</span><span>Privacy &middot; Terms &middot; Cookies</span></div>
+</footer>
+
+<script>
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>
