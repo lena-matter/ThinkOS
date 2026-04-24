@@ -861,6 +861,52 @@
     .footer-inner { grid-template-columns: 1fr; }
     .benefits-grid { grid-template-columns: 1fr; }
   }
+
+  /* ═══════ ON DEMAND COLLECTIONS THEME ═══════ */
+  :root { --ondemand: #10B981; }
+  .tab-btn[data-tab="ondemand"] .tab-icon { background: rgba(16,185,129,0.12); }
+  .tab-btn[data-tab="ondemand"] .tab-icon svg { fill: var(--ondemand); }
+  .tab-btn[data-tab="ondemand"].active { background: var(--ondemand); }
+  .product-card[data-product="ondemand"] .product-hero::before { background: var(--ondemand); }
+  .product-card[data-product="ondemand"] .product-tag { background: #D1FAE5; color: #065F46; }
+  .product-card[data-product="ondemand"] .benefit-icon { background: #D1FAE5; }
+  .overlay-cta[data-product="ondemand"] .cta-arrow { background: #D1FAE5; color: #065F46; }
+
+  /* ═══════ ON DEMAND DASHBOARD MOCK ═══════ */
+  .odc-dash { display: flex; height: 420px; background: #F0FDF4; font-size: 12px; }
+  .odc-sidebar { width: 170px; min-width: 170px; background: #fff; border-right: 1px solid #D1FAE5;
+    padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .odc-sidebar .odc-logo { text-align: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #D1FAE5; }
+  .odc-sidebar .odc-logo span { display: inline-flex; width: 36px; height: 36px; border-radius: 50%;
+    background: #10B981; color: #fff; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; }
+  .odc-sidebar .odc-logo div { font-size: 11px; font-weight: 700; color: #065F46; margin-top: 4px; }
+  .odc-sidebar .odc-logo small { display: block; font-size: 9px; font-weight: 500; color: #10B981; font-style: italic; margin-top: 2px; }
+  .odc-sidebar .odc-label { font-size: 9px; font-weight: 700; color: #6EE7B7; text-transform: uppercase; letter-spacing: 1px; margin: 8px 0 4px 4px; }
+  .odc-sidebar a { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 8px;
+    color: #065F46; font-size: 11px; font-weight: 500; cursor: default; text-decoration: none; }
+  .odc-sidebar a.active { background: #D1FAE5; color: #065F46; font-weight: 700; }
+  .odc-main { flex: 1; padding: 18px 22px; overflow: hidden; }
+  .odc-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .odc-topbar h2 { font-size: 16px; font-weight: 800; color: #065F46; }
+  .odc-period { font-size: 11px; color: #10B981; font-weight: 600; background: #D1FAE5; padding: 4px 10px; border-radius: 20px; }
+  .odc-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .odc-metric-card { background: #fff; border: 1px solid #D1FAE5; border-radius: 10px; padding: 10px 12px; }
+  .odc-metric-card .lbl { font-size: 9px; color: #10B981; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+  .odc-metric-card .val { font-size: 20px; font-weight: 800; color: #065F46; margin: 2px 0; letter-spacing: -0.5px; }
+  .odc-metric-card .chg { font-size: 9px; font-weight: 600; }
+  .odc-metric-card .chg.up { color: #10B981; }
+  .odc-list { background: #fff; border: 1px solid #D1FAE5; border-radius: 12px; overflow: hidden; }
+  .odc-list-head { padding: 10px 14px; font-size: 11px; font-weight: 700; color: #065F46;
+    background: #ECFDF5; border-bottom: 1px solid #D1FAE5; text-transform: uppercase; letter-spacing: 0.5px; }
+  .odc-row { display: grid; grid-template-columns: 54px 1.6fr 1fr 86px; align-items: center; gap: 10px;
+    padding: 8px 14px; border-bottom: 1px solid #F0FDF4; font-size: 11px; color: #065F46; }
+  .odc-row:last-child { border-bottom: none; }
+  .odc-time { font-weight: 800; color: #10B981; }
+  .odc-vendor { font-weight: 600; }
+  .odc-loc { color: #6B7280; font-size: 10px; }
+  .odc-status { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 20px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
+  .odc-status.en-route { background: #FEF3C7; color: #92400E; }
+  .odc-status.scheduled { background: #D1FAE5; color: #065F46; }
 </style>
 </head>
 <body>
@@ -920,6 +966,10 @@
     <button class="tab-btn" data-tab="zeroloop" onclick="switchTab('zeroloop')">
       <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg></span>
       <span class="tab-label"><span class="tab-name">ZeroLoop</span><span class="tab-sub">Hospitality</span></span>
+    </button>
+    <button class="tab-btn" data-tab="ondemand" onclick="switchTab('ondemand')">
+      <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+      <span class="tab-label"><span class="tab-name">On Demand</span><span class="tab-sub">Collections</span></span>
     </button>
   </div>
 
@@ -1459,6 +1509,77 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ═══════════════ ON DEMAND COLLECTIONS ═══════════════ -->
+  <div class="tab-content" id="tab-ondemand">
+    <div class="product-card" data-product="ondemand">
+      <div class="product-hero">
+        <div class="product-tag">🚛 On Demand Collections</div>
+        <h3>Book Waste Pickups in Two Taps</h3>
+        <p>A marketplace-style booking platform that connects venues and vendors with certified waste collection providers. Schedule pickups in seconds, track collectors in real time, and generate carbon receipts automatically — no contracts, no guesswork.</p>
+      </div>
+
+      <div class="snapshot-frame">
+        <a href="https://lena-matter.github.io/on-demand-collections/" target="_blank" title="" class="snapshot-link-overlay">
+          <div class="overlay-content">
+            <span class="overlay-cta" data-product="ondemand">Launch On Demand Collections <span class="cta-arrow">→</span></span>
+          </div>
+        </a>
+        <div class="snapshot-titlebar">
+          <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
+        </div>
+        <div class="odc-dash">
+          <div class="odc-sidebar">
+            <div class="odc-logo">
+              <span>OD</span>
+              <div>On Demand<small>Collections</small></div>
+            </div>
+            <div class="odc-label">Bookings</div>
+            <a class="active">🗓️ Dashboard</a>
+            <a>📅 Schedule Pickup</a>
+            <a>📍 Live Map</a>
+            <a>🚛 Vendors</a>
+            <div class="odc-label">History</div>
+            <a>📄 Past Pickups</a>
+            <a>🧾 Invoices</a>
+            <a>🌿 Carbon Receipts</a>
+          </div>
+          <div class="odc-main">
+            <div class="odc-topbar">
+              <h2>Today's Collections</h2>
+              <span class="odc-period">📅 24 April 2026</span>
+            </div>
+            <div class="odc-metrics">
+              <div class="odc-metric-card"><div class="lbl">Active Bookings</div><div class="val">14</div><div class="chg up">↑ 3 since yesterday</div></div>
+              <div class="odc-metric-card"><div class="lbl">Pickups Today</div><div class="val">8</div><div class="chg up">2 en route · 6 queued</div></div>
+              <div class="odc-metric-card"><div class="lbl">On-Time Rate</div><div class="val">97%</div><div class="chg up">↑ 2% this week</div></div>
+              <div class="odc-metric-card"><div class="lbl">CO₂e Saved</div><div class="val">1.4t</div><div class="chg up">Diverted MTD</div></div>
+            </div>
+            <div class="odc-list">
+              <div class="odc-list-head">Upcoming Pickups</div>
+              <div class="odc-row"><span class="odc-time">09:40</span><span class="odc-vendor">The Morning Brew · Cafe</span><span class="odc-loc">📍 Collins St</span><span class="odc-status en-route">En Route</span></div>
+              <div class="odc-row"><span class="odc-time">10:15</span><span class="odc-vendor">Fusion Food Court</span><span class="odc-loc">📍 Queen Vic Market</span><span class="odc-status scheduled">Scheduled</span></div>
+              <div class="odc-row"><span class="odc-time">11:00</span><span class="odc-vendor">Green Plate Catering</span><span class="odc-loc">📍 Docklands</span><span class="odc-status scheduled">Scheduled</span></div>
+              <div class="odc-row"><span class="odc-time">11:45</span><span class="odc-vendor">Harbour Hotel Kitchen</span><span class="odc-loc">📍 Southbank</span><span class="odc-status scheduled">Scheduled</span></div>
+              <div class="odc-row"><span class="odc-time">13:20</span><span class="odc-vendor">Market Square Vendors</span><span class="odc-loc">📍 Fed Square</span><span class="odc-status scheduled">Scheduled</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="benefits-section">
+        <div class="benefits-title">User Benefits</div>
+        <div class="benefits-grid">
+          <div class="benefit-card"><div class="benefit-icon">📲</div><div class="benefit-text"><h4>Two-Tap Booking</h4><p>Request a pickup from any phone, tablet, or desktop in seconds — no contracts, no account managers, no waiting.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">📍</div><div class="benefit-text"><h4>Real-Time Tracking</h4><p>See your collector's location, ETA, and progress live on the map — just like a ride-share for waste.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🚛</div><div class="benefit-text"><h4>Verified Vendor Network</h4><p>Work only with licensed, insured, and emissions-certified collectors rated by thousands of venues.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">💳</div><div class="benefit-text"><h4>Pay-As-You-Go</h4><p>No monthly contracts. Pay only for the pickups you need, when you need them, with transparent per-bin pricing.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">🌿</div><div class="benefit-text"><h4>Carbon Receipts</h4><p>Every collection generates an automated carbon-impact certificate for your ESG, council, and sustainability reports.</p></div></div>
+          <div class="benefit-card"><div class="benefit-icon">⭐</div><div class="benefit-text"><h4>Ratings &amp; Reviews</h4><p>Rate collectors after each pickup. Build trust in the network and help other venues find the best local providers.</p></div></div>
+        </div>
+      </div>
     </div>
   </div>
 
