@@ -1320,6 +1320,20 @@
         <p>AI agents and IoT sensors working together to drive your facility toward zero waste. ZeroLoop provides intelligent tracking, predictive analytics, and automated reporting for commercial and industrial environments.</p>
       </div>
 
+     Here's the plan: keep the existing CSS (yellow theme is part of the broader ThinkOS product styling — that's fine), just swap the dashboard content to reflect the live site's actual nav, metrics, and agents. I removed the award badges row since the live dashboard doesn't show that.
+
+## Steps in GitHub web editor
+
+1. Go to your `ThinkOS` repo on github.com
+2. Open `index.html` → click the pencil icon ✏️
+3. Press `Cmd+F` (the editor's find), search for `<!-- ═══════════════ ZEROLOOP ═══════════════ -->`
+4. Below it, select **lines 1323 through 1437** — that's the entire block starting `<div class="snapshot-frame">` up to and including the `</div>` that closes it (the next line should be a blank line then `<div class="benefits-section">`)
+5. Replace with the block below
+6. Commit directly to `main`
+
+## Replacement block
+
+```html
       <div class="snapshot-frame">
         <a href="https://lena-matter.github.io/zeroloop/" target="_blank" title="" class="snapshot-link-overlay">
           <div class="overlay-content">
@@ -1333,23 +1347,24 @@
           <div class="zl-sidebar">
             <div class="zl-logo">
               <span>ZL</span>
-              <div>ZeroLoop<small>Facilities Intelligence</small></div>
+              <div>ZeroLoop<small>Facilities</small></div>
             </div>
             <div class="zl-label">Overview</div>
             <a class="active">📊 Dashboard</a>
-            <a>🗑️ Waste Streams</a>
-            <a>📡 IoT Sensors</a>
+            <a>🏢 Building Map</a>
+            <a>📅 Scheduling</a>
+            <a>🤖 AI Agents</a>
+            <a>🎯 Engagement</a>
             <a>📈 Analytics</a>
             <div class="zl-label">Operations</div>
-            <a>🚛 Collections</a>
-            <a>📋 Compliance</a>
-            <a>📄 ESG Reports</a>
+            <a>🧾 AIRS</a>
+            <a>💼 Accounting</a>
+            <a>🔒 Secure Disposal</a>
+            <a>🌱 Sustainability</a>
             <div class="zl-agents">
               <div class="zl-label">AI Agents</div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Sorting Agent</span><span class="zl-agent-status">Active</span></div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Prediction Agent</span><span class="zl-agent-status">Active</span></div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Compliance Agent</span><span class="zl-agent-status">Active</span></div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Report Agent</span><span class="zl-agent-status">Active</span></div>
+              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Facility Efficiency</span><span class="zl-agent-status">Active</span></div>
+              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Workplace Engagement</span><span class="zl-agent-status">Active</span></div>
             </div>
           </div>
           <div class="zl-main">
@@ -1358,84 +1373,63 @@
               <span class="zl-period">📅 March 2026</span>
             </div>
             <div class="zl-metrics">
-              <div class="zl-metric-card"><div class="lbl">Diversion Rate</div><div class="val">89%</div><div class="chg up">↑ 14% this quarter</div></div>
-              <div class="zl-metric-card"><div class="lbl">AI Agents Active</div><div class="val">24</div><div class="chg up">Monitoring 24/7</div></div>
-              <div class="zl-metric-card"><div class="lbl">IoT Sensors</div><div class="val">186</div><div class="chg up">↑ 12 new deployed</div></div>
-              <div class="zl-metric-card"><div class="lbl">Annual Savings</div><div class="val">£128K</div><div class="chg up">↑ 22% YoY</div></div>
-            </div>
-            <div class="zl-badges-row">
-              <div class="zl-award-badge">
-                <div class="badge-medal">🏆</div>
-                <div class="badge-info">
-                  <div class="badge-label">1st Place</div>
-                  <div class="badge-name">MarTech Collective Prize</div>
-                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
-                </div>
-                <span class="badge-first">FIRST</span>
-              </div>
-              <div class="zl-award-badge">
-                <div class="badge-medal">👑</div>
-                <div class="badge-info">
-                  <div class="badge-label">1st Place</div>
-                  <div class="badge-name">People's Choice Award</div>
-                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
-                </div>
-                <span class="badge-first">FIRST</span>
-              </div>
-              <div class="zl-award-badge">
-                <div class="badge-medal">🥇</div>
-                <div class="badge-info">
-                  <div class="badge-label">1st Place</div>
-                  <div class="badge-name">Winner — Hospitality Category</div>
-                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
-                </div>
-                <span class="badge-first">FIRST</span>
-              </div>
+              <div class="zl-metric-card"><div class="lbl">Active Bins</div><div class="val">186</div><div class="chg up">↑ 12 deployed</div></div>
+              <div class="zl-metric-card"><div class="lbl">Avg Fill Level</div><div class="val">62%</div><div class="chg up">Optimized</div></div>
+              <div class="zl-metric-card"><div class="lbl">Diversion Rate</div><div class="val">89%</div><div class="chg up">↑ 14% QoQ</div></div>
+              <div class="zl-metric-card"><div class="lbl">Monthly Savings</div><div class="val">$4,200</div><div class="chg up">37% fewer pickups</div></div>
             </div>
             <div class="zl-charts">
               <div class="zl-chart-card">
-                <h4>Weekly Waste by Category (tonnes)</h4>
+                <h4>Building Map — Bin Status by Floor</h4>
                 <div class="zl-bar-chart">
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:60px;background:#F0B016"></div><div class="zl-bar-label">Mon</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:48px;background:#F0B016"></div><div class="zl-bar-label">Tue</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:72px;background:#F0B016"></div><div class="zl-bar-label">Wed</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:55px;background:#F0B016"></div><div class="zl-bar-label">Thu</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:80px;background:#F0B016"></div><div class="zl-bar-label">Fri</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:35px;background:#F0B016"></div><div class="zl-bar-label">Sat</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:20px;background:#F0B016"></div><div class="zl-bar-label">Sun</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:70px;background:#F0B016"></div><div class="zl-bar-label">B1</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:45px;background:#F0B016"></div><div class="zl-bar-label">G</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:80px;background:#F0B016"></div><div class="zl-bar-label">L1</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:62px;background:#F0B016"></div><div class="zl-bar-label">L2</div></div>
+                  <div class="zl-bar-group"><div class="zl-bar" style="height:55px;background:#F0B016"></div><div class="zl-bar-label">L3</div></div>
                 </div>
               </div>
               <div class="zl-chart-card">
-                <h4>IoT Sensor Status</h4>
+                <h4>Engagement & Accuracy</h4>
                 <div class="zl-sensor-grid">
-                  <div class="zl-sensor"><span class="s-icon">🌡️</span><div><div class="s-name">Temperature</div><div class="s-val">22.4°C</div></div></div>
-                  <div class="zl-sensor"><span class="s-icon">💧</span><div><div class="s-name">Humidity</div><div class="s-val">45%</div></div></div>
-                  <div class="zl-sensor"><span class="s-icon">⚖️</span><div><div class="s-name">Weight Sensors</div><div class="s-val">98% up</div></div></div>
-                  <div class="zl-sensor"><span class="s-icon">📡</span><div><div class="s-name">Fill Sensors</div><div class="s-val">186 online</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">⭐</span><div><div class="s-name">Avg Rating</div><div class="s-val">4.6/5</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">👥</span><div><div class="s-name">Participants</div><div class="s-val">156</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">🎯</span><div><div class="s-name">Participation</div><div class="s-val">78%</div></div></div>
+                  <div class="zl-sensor"><span class="s-icon">✅</span><div><div class="s-name">AIRS Accuracy</div><div class="s-val">95%</div></div></div>
                 </div>
               </div>
             </div>
             <div class="zl-bottom-bar">
               <div class="zl-action-card">
                 <div class="act-head"><span class="act-icon">🤖</span><span class="act-title">AI Insight</span></div>
-                <div class="act-desc">Sorting efficiency up 8% this week. Paper contamination down in Zone B.</div>
+                <div class="act-desc">Facility Efficiency Agent reduced collections 37% this month via predictive scheduling.</div>
                 <span class="act-tag ai">AI Agent</span>
               </div>
               <div class="zl-action-card">
                 <div class="act-head"><span class="act-icon">📡</span><span class="act-title">IoT Alert</span></div>
-                <div class="act-desc">Compactor #4 reaching capacity. Scheduled collection moved to 2pm.</div>
+                <div class="act-desc">Bin L2-04 reaching 92% capacity. BMS-integrated collection scheduled.</div>
                 <span class="act-tag iot">IoT Sensor</span>
               </div>
               <div class="zl-action-card">
-                <div class="act-head"><span class="act-icon">📊</span><span class="act-title">ESG Update</span></div>
-                <div class="act-desc">Q1 2026 sustainability report ready for review. GRI-aligned metrics generated.</div>
-                <span class="act-tag report">Report</span>
+                <div class="act-head"><span class="act-icon">🧾</span><span class="act-title">AIRS Update</span></div>
+                <div class="act-desc">Invoice reconciliation synced with Xero · 95% validation accuracy.</div>
+                <span class="act-tag report">Accounting</span>
               </div>
             </div>
           </div>
         </div>
       </div>
+```
 
+## What changed
+- **Sidebar nav:** now matches the live site (Building Map, Scheduling, AI Agents, Engagement, AIRS, Accounting, Secure Disposal, Sustainability)
+- **AI Agents:** reduced from 4 fictional ones to the 2 real ones (Facility Efficiency, Workplace Engagement)
+- **Metrics:** swapped to Active Bins / Avg Fill / Diversion Rate / Monthly Savings ($4,200) — matches live KPIs
+- **Charts:** left chart is now Building Map by floor (B1, G, L1–3); right chart shows Engagement (4.6 rating, 156 participants, 78%, 95%)
+- **Bottom cards:** rewritten to reference Facility Efficiency Agent, BMS bin alert, and Xero/AIRS reconciliation
+- **Removed:** the 3 award badges row (the live dashboard doesn't show them — they're still in your blog section further down, which is fine)
+
+One note: the color scheme stays yellow/gold because that's the ThinkOS brand color for ZeroLoop across the whole site. If you want to also change it to match the live site's green (#43af49), that's a much bigger CSS change — let me know and I can do that separately.
       <div class="benefits-section">
         <div class="benefits-title">User Benefits</div>
         <div class="benefits-grid">
