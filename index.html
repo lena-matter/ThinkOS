@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ThinkOS — Intelligent Waste Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -538,135 +539,107 @@
   .cl-map-stat .ms-val { font-size: 18px; font-weight: 800; color: #0C4A6E; }
   .cl-map-stat .ms-chg { font-size: 9px; color: #43B02A; font-weight: 600; }
 
-  /* ═══════ ZEROLOOP DASHBOARD ═══════ */
-  .zl-dash {
-    display: flex; height: 420px; background: #18181B; font-size: 12px; color: #D4D4D8;
+  /* ═══════ ZEROLOOP DASHBOARD (live-site palette) ═══════ */
+  .zl-page {
+    position: relative; padding: 0 0 20px; overflow: hidden;
+    background: #fdf8f4; font-family: 'DM Sans', -apple-system, sans-serif; color: #2d2a26;
   }
-  .zl-sidebar {
-    width: 180px; min-width: 180px; background: #18181B; border-right: 1px solid #27272A;
-    padding: 16px 12px; display: flex; flex-direction: column;
+  .zl-page .dot-grid {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(circle, #d4957a 0.7px, transparent 0.7px);
+    background-size: 28px 28px; opacity: 0.05;
   }
-  .zl-sidebar .zl-logo {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #27272A;
+  .zl-page .blob { position: absolute; pointer-events: none; z-index: 0; opacity: 0.35; border-radius: 50%; }
+  .zl-page .blob-1 {
+    top: -80px; right: -80px; width: 340px; height: 340px;
+    background: radial-gradient(ellipse at 40% 50%, #f5d5b8, transparent 70%);
+    border-radius: 60% 40% 50% 50%;
   }
-  .zl-sidebar .zl-logo span {
-    display: inline-flex; width: 32px; height: 32px; border-radius: 8px;
-    background: linear-gradient(135deg, #F0B016, #EF4444); color: #fff;
-    align-items: center; justify-content: center; font-weight: 800; font-size: 14px;
-  }
-  .zl-sidebar .zl-logo div { font-weight: 700; font-size: 13px; color: #FAFAFA; }
-  .zl-sidebar .zl-logo small { font-size: 9px; color: #52525B; display: block; }
-  .zl-sidebar .zl-label { font-size: 9px; font-weight: 700; color: #52525B; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 6px 4px; }
-  .zl-sidebar a {
-    display: flex; align-items: center; gap: 8px;
-    padding: 8px 10px; border-radius: 8px; font-size: 11px;
-    color: #71717A; text-decoration: none; font-weight: 500; transition: all 0.15s;
-  }
-  .zl-sidebar a.active { background: rgba(245,158,11,0.12); color: #FBBF24; font-weight: 600; }
-  .zl-sidebar a:hover:not(.active) { background: #27272A; }
-
-  .zl-agents {
-    margin-top: auto; border-top: 1px solid #27272A; padding-top: 12px;
-  }
-  .zl-agent-item {
-    display: flex; align-items: center; gap: 8px;
-    padding: 6px 8px; border-radius: 6px; margin-bottom: 4px;
-  }
-  .zl-agent-dot { width: 6px; height: 6px; border-radius: 50%; background: #43B02A; animation: pulse 2s infinite; }
-  .zl-agent-name { font-size: 10px; color: #A1A1AA; }
-  .zl-agent-status { font-size: 9px; color: #43B02A; margin-left: auto; font-weight: 600; }
-
-  .zl-main { flex: 1; padding: 20px 24px; overflow: hidden; }
-  .zl-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .zl-topbar h2 { font-size: 16px; font-weight: 700; color: #FAFAFA; }
-  .zl-topbar .zl-period {
-    font-size: 10px; color: #52525B; background: #27272A;
-    padding: 4px 12px; border-radius: 6px; border: 1px solid #3F3F46;
+  .zl-page .blob-2 {
+    bottom: -60px; left: -90px; width: 380px; height: 280px;
+    background: radial-gradient(ellipse at 60% 40%, #c8ddc6, transparent 70%);
+    border-radius: 40% 60% 50% 50%;
   }
 
-  .zl-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
-  .zl-metric-card {
-    background: #27272A; border: 1px solid #3F3F46; border-radius: 10px; padding: 14px;
+  .zl-nav {
+    position: relative; z-index: 2;
+    background: rgba(253,248,244,0.88); backdrop-filter: blur(16px);
+    padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between;
+    height: 52px; border-bottom: 1px solid rgba(212,149,122,0.2);
   }
-  .zl-metric-card .lbl { font-size: 10px; color: #71717A; margin-bottom: 4px; }
-  .zl-metric-card .val { font-size: 22px; font-weight: 800; color: #FAFAFA; }
-  .zl-metric-card .chg { font-size: 9px; margin-top: 4px; }
-  .zl-metric-card .chg.up { color: #43B02A; }
+  .zl-nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #c07a5f; }
+  .zl-nav-logo .lp { color: #5f8a5c; }
+  .zl-nav-logo .sub {
+    font-family: 'DM Sans', sans-serif; font-size: 0.62rem; color: #908880;
+    font-weight: 500; margin-left: 0.3rem; letter-spacing: 0.5px;
+  }
+  .zl-nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+  .zl-nav-links button {
+    background: none; border: none; padding: 0.32rem 0.7rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500;
+    color: #908880; cursor: pointer; border-radius: 20px; transition: all 0.25s;
+  }
+  .zl-nav-links button.active { background: #d4957a; color: white; }
+  .zl-nav-links button.secure { border: 2px solid #2c2c2c; padding: 0.24rem 0.6rem; }
 
-  .zl-charts { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .zl-chart-card {
-    background: #27272A; border: 1px solid #3F3F46; border-radius: 10px; padding: 16px;
-  }
-  .zl-chart-card h4 { font-size: 12px; font-weight: 600; color: #FAFAFA; margin-bottom: 12px; }
+  .zl-body { position: relative; z-index: 1; padding: 1.5rem 2rem 0.5rem; }
 
-  .zl-bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 100px; padding-top: 8px; }
-  .zl-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .zl-bar {
-    width: 100%; border-radius: 4px 4px 0 0; transition: height 0.3s;
+  .zl-hero { text-align: center; padding: 0.5rem 0 1.5rem; }
+  .zl-hero h1 { font-family: 'DM Serif Display', serif; font-size: 2.1rem; color: #2d2a26; line-height: 1.15; }
+  .zl-hero h1 .accent-coral { color: #d4957a; }
+  .zl-hero h1 .accent-sage { color: #5f8a5c; }
+  .zl-hero .divider {
+    width: 90px; height: 3px; margin: 0.7rem auto 0.9rem;
+    background: linear-gradient(90deg, #e8a87c, #8fae8b, #e8a87c); border-radius: 2px;
   }
-  .zl-bar-label { font-size: 9px; color: #52525B; }
+  .zl-hero p { color: #908880; max-width: 480px; margin: 0 auto; font-size: 0.85rem; line-height: 1.55; }
 
-  .zl-sensor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .zl-sensor {
-    background: #3F3F46; border-radius: 8px; padding: 10px;
-    display: flex; align-items: center; gap: 8px;
+  .zl-stat-row { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .zl-stat-pill {
+    background: #ffffff; border: 1px solid rgba(212,149,122,0.2); border-radius: 16px;
+    padding: 0.9rem 1rem; text-align: center; box-shadow: 0 2px 10px rgba(45,42,38,0.06);
+    flex: 1; min-width: 110px;
   }
-  .zl-sensor .s-icon { font-size: 16px; }
-  .zl-sensor .s-name { font-size: 10px; color: #A1A1AA; }
-  .zl-sensor .s-val { font-size: 13px; font-weight: 700; color: #FAFAFA; }
-  .zl-sensor .s-status { font-size: 9px; color: #43B02A; }
+  .zl-stat-val { font-family: 'DM Serif Display', serif; font-size: 1.45rem; color: #c07a5f; line-height: 1.1; }
+  .zl-stat-lbl { font-size: 0.62rem; color: #908880; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; margin-top: 0.2rem; }
 
-  .zl-bottom-bar {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
-  }
-  .zl-action-card {
-    background: #27272A; border: 1px solid #3F3F46; border-radius: 10px; padding: 12px;
-  }
-  .zl-action-card .act-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-  .zl-action-card .act-head .act-icon { font-size: 14px; }
-  .zl-action-card .act-head .act-title { font-size: 11px; font-weight: 600; color: #FAFAFA; }
-  .zl-action-card .act-desc { font-size: 10px; color: #71717A; line-height: 1.5; }
-  .zl-action-card .act-tag {
-    display: inline-block; margin-top: 6px;
-    font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 600;
-  }
-  .zl-action-card .act-tag.ai { background: rgba(245,158,11,0.15); color: #FBBF24; }
-  .zl-action-card .act-tag.iot { background: rgba(16,185,129,0.15); color: #43B02A; }
-  .zl-action-card .act-tag.report { background: rgba(99,102,241,0.15); color: #818CF8; }
+  .zl-grid-2 { display: grid; gap: 1rem; grid-template-columns: repeat(2, 1fr); margin-bottom: 1.2rem; }
 
-  /* ═══════ ZL AWARD BADGES ═══════ */
-  .zl-badges-row {
-    display: flex; gap: 8px; margin-bottom: 14px;
+  .zl-agent-card {
+    background: #ffffff; border: 1px solid rgba(212,149,122,0.2); border-radius: 18px;
+    overflow: hidden; box-shadow: 0 2px 12px rgba(45,42,38,0.06);
   }
-  .zl-award-badge {
-    flex: 1; display: flex; align-items: center; gap: 10px;
-    background: linear-gradient(135deg, #27272A, #3F3F46); border: 1px solid #52525B;
-    border-radius: 10px; padding: 10px 14px;
-    position: relative; overflow: hidden;
-  }
-  .zl-award-badge::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, #F0B016, #EF4444, #F0B016);
-  }
-  .zl-award-badge .badge-medal {
+  .zl-agent-header { padding: 1rem 1.1rem; display: flex; align-items: center; gap: 0.8rem; }
+  .zl-agent-header.sage { background: linear-gradient(135deg, #c8ddc6 0%, rgba(200,221,198,0.3) 100%); }
+  .zl-agent-header.peach { background: linear-gradient(135deg, #fceee2 0%, rgba(252,238,226,0.3) 100%); }
+  .zl-agent-icon {
     width: 36px; height: 36px; min-width: 36px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; background: rgba(245,158,11,0.15); border: 2px solid #F0B016;
+    color: white; font-size: 18px;
   }
-  .zl-award-badge .badge-info { flex: 1; }
-  .zl-award-badge .badge-label {
-    font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-    color: #F0B016; margin-bottom: 2px;
+  .zl-agent-icon.sage { background: #8fae8b; }
+  .zl-agent-icon.peach { background: #d4957a; }
+  .zl-agent-header h3 { font-size: 0.92rem; font-weight: 600; color: #2d2a26; margin-bottom: 0.15rem; }
+  .zl-agent-header p { font-size: 0.74rem; color: #5a554e; }
+  .zl-agent-body { padding: 0.8rem 1.1rem 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .zl-mini-badge { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 18px; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.3px; }
+  .zl-mini-badge.green { background: #c8ddc6; color: #5f8a5c; }
+  .zl-mini-badge.peach { background: #fceee2; color: #c07a5f; }
+
+  .zl-card {
+    background: #ffffff; border: 1px solid rgba(212,149,122,0.2); border-radius: 18px;
+    padding: 1.1rem 1.2rem; box-shadow: 0 2px 12px rgba(45,42,38,0.06);
   }
-  .zl-award-badge .badge-name { font-size: 11px; font-weight: 700; color: #FAFAFA; line-height: 1.3; }
-  .zl-award-badge .badge-event { font-size: 8px; color: #71717A; margin-top: 1px; }
-  .zl-award-badge .badge-first {
-    position: absolute; top: 6px; right: 8px;
-    font-size: 8px; font-weight: 800; color: #F0B016;
-    background: rgba(245,158,11,0.1); padding: 2px 6px; border-radius: 4px;
-    border: 1px solid rgba(245,158,11,0.3); letter-spacing: 0.5px;
-  }
+  .zl-card h3 { font-size: 0.88rem; font-weight: 600; color: #2d2a26; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.7rem; }
+  .zl-live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5f8a5c; animation: pulse 2s infinite; }
+  .zl-alert { display: flex; gap: 0.6rem; padding: 0.55rem 0; border-bottom: 1px solid rgba(212,149,122,0.2); font-size: 0.76rem; color: #5a554e; }
+  .zl-alert:last-child { border-bottom: none; }
+  .zl-alert .a-icon { font-size: 14px; min-width: 18px; }
+  .zl-alert strong { color: #2d2a26; font-weight: 600; }
+  .zl-sched-row { display: flex; justify-content: space-between; padding: 0.45rem 0; border-bottom: 1px solid rgba(212,149,122,0.2); font-size: 0.78rem; }
+  .zl-sched-row:last-child { border-bottom: none; }
+  .zl-sched-row .time { color: #c07a5f; font-weight: 600; }
+  .zl-sched-row .desc { color: #5a554e; text-align: right; }
 
   /* ═══════ BLOG / NEWS SECTION ═══════ */
   .blog-section {
@@ -1329,107 +1302,89 @@
         <div class="snapshot-titlebar">
           <span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span>
         </div>
-        <div class="zl-dash">
-          <div class="zl-sidebar">
-            <div class="zl-logo">
-              <span>ZL</span>
-              <div>ZeroLoop<small>Facilities Intelligence</small></div>
+        <div class="zl-page">
+          <div class="dot-grid"></div>
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+
+          <nav class="zl-nav">
+            <div class="zl-nav-logo">Zero<span class="lp">Loop</span> <span class="sub">FACILITIES</span></div>
+            <div class="zl-nav-links">
+              <button class="active">Dashboard</button>
+              <button>Building Map</button>
+              <button>Scheduling</button>
+              <button>AI Agents</button>
+              <button>Engagement</button>
+              <button>Analytics</button>
+              <button>AIRS</button>
+              <button>Accounting</button>
+              <button class="secure">Secure Disposal</button>
+              <button>Sustainability</button>
             </div>
-            <div class="zl-label">Overview</div>
-            <a class="active">📊 Dashboard</a>
-            <a>🗑️ Waste Streams</a>
-            <a>📡 IoT Sensors</a>
-            <a>📈 Analytics</a>
-            <div class="zl-label">Operations</div>
-            <a>🚛 Collections</a>
-            <a>📋 Compliance</a>
-            <a>📄 ESG Reports</a>
-            <div class="zl-agents">
-              <div class="zl-label">AI Agents</div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Sorting Agent</span><span class="zl-agent-status">Active</span></div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Prediction Agent</span><span class="zl-agent-status">Active</span></div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Compliance Agent</span><span class="zl-agent-status">Active</span></div>
-              <div class="zl-agent-item"><span class="zl-agent-dot"></span><span class="zl-agent-name">Report Agent</span><span class="zl-agent-status">Active</span></div>
+          </nav>
+
+          <div class="zl-body">
+            <div class="zl-hero">
+              <h1>Smart <span class="accent-coral">Facilities</span> Waste<br><span class="accent-sage">Management</span></h1>
+              <div class="divider"></div>
+              <p>AI-powered waste efficiency for facilities managers. Two intelligent agents working together — optimising operations and engaging your workplace.</p>
             </div>
-          </div>
-          <div class="zl-main">
-            <div class="zl-topbar">
-              <h2>Facilities Dashboard</h2>
-              <span class="zl-period">📅 March 2026</span>
+
+            <div class="zl-stat-row">
+              <div class="zl-stat-pill"><div class="zl-stat-val">186</div><div class="zl-stat-lbl">Active Bins</div></div>
+              <div class="zl-stat-pill"><div class="zl-stat-val">62%</div><div class="zl-stat-lbl">Avg Fill Level</div></div>
+              <div class="zl-stat-pill"><div class="zl-stat-val">24</div><div class="zl-stat-lbl">Collections Today</div></div>
+              <div class="zl-stat-pill"><div class="zl-stat-val">89%</div><div class="zl-stat-lbl">Diversion Rate</div></div>
+              <div class="zl-stat-pill"><div class="zl-stat-val">$4,200</div><div class="zl-stat-lbl">Monthly Savings</div></div>
+              <div class="zl-stat-pill"><div class="zl-stat-val">1,840</div><div class="zl-stat-lbl">kg CO₂ Saved</div></div>
             </div>
-            <div class="zl-metrics">
-              <div class="zl-metric-card"><div class="lbl">Diversion Rate</div><div class="val">89%</div><div class="chg up">↑ 14% this quarter</div></div>
-              <div class="zl-metric-card"><div class="lbl">AI Agents Active</div><div class="val">24</div><div class="chg up">Monitoring 24/7</div></div>
-              <div class="zl-metric-card"><div class="lbl">IoT Sensors</div><div class="val">186</div><div class="chg up">↑ 12 new deployed</div></div>
-              <div class="zl-metric-card"><div class="lbl">Annual Savings</div><div class="val">£128K</div><div class="chg up">↑ 22% YoY</div></div>
-            </div>
-            <div class="zl-badges-row">
-              <div class="zl-award-badge">
-                <div class="badge-medal">🏆</div>
-                <div class="badge-info">
-                  <div class="badge-label">1st Place</div>
-                  <div class="badge-name">MarTech Collective Prize</div>
-                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
+
+            <div class="zl-grid-2">
+              <div class="zl-agent-card">
+                <div class="zl-agent-header sage">
+                  <div class="zl-agent-icon sage">⚙</div>
+                  <div>
+                    <h3>Facility Waste Efficiency Agent</h3>
+                    <p>Operations, scheduling, predictive maintenance</p>
+                  </div>
                 </div>
-                <span class="badge-first">FIRST</span>
-              </div>
-              <div class="zl-award-badge">
-                <div class="badge-medal">👑</div>
-                <div class="badge-info">
-                  <div class="badge-label">1st Place</div>
-                  <div class="badge-name">People's Choice Award</div>
-                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
-                </div>
-                <span class="badge-first">FIRST</span>
-              </div>
-              <div class="zl-award-badge">
-                <div class="badge-medal">🥇</div>
-                <div class="badge-info">
-                  <div class="badge-label">1st Place</div>
-                  <div class="badge-name">Winner — Hospitality Category</div>
-                  <div class="badge-event">Melbourne-Bandung Food Waste Challenge 2025</div>
-                </div>
-                <span class="badge-first">FIRST</span>
-              </div>
-            </div>
-            <div class="zl-charts">
-              <div class="zl-chart-card">
-                <h4>Weekly Waste by Category (tonnes)</h4>
-                <div class="zl-bar-chart">
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:60px;background:#F0B016"></div><div class="zl-bar-label">Mon</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:48px;background:#F0B016"></div><div class="zl-bar-label">Tue</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:72px;background:#F0B016"></div><div class="zl-bar-label">Wed</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:55px;background:#F0B016"></div><div class="zl-bar-label">Thu</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:80px;background:#F0B016"></div><div class="zl-bar-label">Fri</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:35px;background:#F0B016"></div><div class="zl-bar-label">Sat</div></div>
-                  <div class="zl-bar-group"><div class="zl-bar" style="height:20px;background:#F0B016"></div><div class="zl-bar-label">Sun</div></div>
+                <div class="zl-agent-body">
+                  <span class="zl-mini-badge green">IoT Tracking</span>
+                  <span class="zl-mini-badge green">AI Insights</span>
+                  <span class="zl-mini-badge green">BMS Integration</span>
+                  <span class="zl-mini-badge green">Predictive</span>
                 </div>
               </div>
-              <div class="zl-chart-card">
-                <h4>IoT Sensor Status</h4>
-                <div class="zl-sensor-grid">
-                  <div class="zl-sensor"><span class="s-icon">🌡️</span><div><div class="s-name">Temperature</div><div class="s-val">22.4°C</div></div></div>
-                  <div class="zl-sensor"><span class="s-icon">💧</span><div><div class="s-name">Humidity</div><div class="s-val">45%</div></div></div>
-                  <div class="zl-sensor"><span class="s-icon">⚖️</span><div><div class="s-name">Weight Sensors</div><div class="s-val">98% up</div></div></div>
-                  <div class="zl-sensor"><span class="s-icon">📡</span><div><div class="s-name">Fill Sensors</div><div class="s-val">186 online</div></div></div>
+              <div class="zl-agent-card">
+                <div class="zl-agent-header peach">
+                  <div class="zl-agent-icon peach">👥</div>
+                  <div>
+                    <h3>Workplace Engagement Agent</h3>
+                    <p>Gamification, education, sustainability culture</p>
+                  </div>
+                </div>
+                <div class="zl-agent-body">
+                  <span class="zl-mini-badge peach">Challenges</span>
+                  <span class="zl-mini-badge peach">Dashboards</span>
+                  <span class="zl-mini-badge peach">Education</span>
+                  <span class="zl-mini-badge peach">Rewards</span>
                 </div>
               </div>
             </div>
-            <div class="zl-bottom-bar">
-              <div class="zl-action-card">
-                <div class="act-head"><span class="act-icon">🤖</span><span class="act-title">AI Insight</span></div>
-                <div class="act-desc">Sorting efficiency up 8% this week. Paper contamination down in Zone B.</div>
-                <span class="act-tag ai">AI Agent</span>
+
+            <div class="zl-grid-2">
+              <div class="zl-card">
+                <h3><span class="zl-live-dot"></span> Live Alerts</h3>
+                <div class="zl-alert"><span class="a-icon">📡</span><div><strong>Bin L2-04</strong> reaching 92% capacity. Collection scheduled.</div></div>
+                <div class="zl-alert"><span class="a-icon">⚠️</span><div><strong>Compactor B1</strong> sensor offline — diagnostic dispatched.</div></div>
+                <div class="zl-alert"><span class="a-icon">✅</span><div><strong>AIRS</strong> reconciled 18 invoices · 95% validation accuracy.</div></div>
               </div>
-              <div class="zl-action-card">
-                <div class="act-head"><span class="act-icon">📡</span><span class="act-title">IoT Alert</span></div>
-                <div class="act-desc">Compactor #4 reaching capacity. Scheduled collection moved to 2pm.</div>
-                <span class="act-tag iot">IoT Sensor</span>
-              </div>
-              <div class="zl-action-card">
-                <div class="act-head"><span class="act-icon">📊</span><span class="act-title">ESG Update</span></div>
-                <div class="act-desc">Q1 2026 sustainability report ready for review. GRI-aligned metrics generated.</div>
-                <span class="act-tag report">Report</span>
+              <div class="zl-card">
+                <h3>Today's Schedule</h3>
+                <div class="zl-sched-row"><span class="time">10:30</span><span class="desc">Recycling pickup · Level 2</span></div>
+                <div class="zl-sched-row"><span class="time">13:00</span><span class="desc">Organics collection · Ground</span></div>
+                <div class="zl-sched-row"><span class="time">15:45</span><span class="desc">General waste · B1 compactor</span></div>
+                <div class="zl-sched-row"><span class="time">17:00</span><span class="desc">Confidential shred · L3</span></div>
               </div>
             </div>
           </div>
