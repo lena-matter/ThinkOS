@@ -567,11 +567,11 @@
     padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between;
     height: 52px; border-bottom: 1px solid rgba(212,149,122,0.2);
   }
-  .zl-nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #c07a5f; }
-  .zl-nav-logo .lp { color: #5f8a5c; }
+  .zl-nav-logo { display: flex; align-items: center; gap: 0.5rem; }
+  .zl-nav-logo img { height: 26px; width: auto; display: block; }
   .zl-nav-logo .sub {
     font-family: 'DM Sans', sans-serif; font-size: 0.62rem; color: #908880;
-    font-weight: 500; margin-left: 0.3rem; letter-spacing: 0.5px;
+    font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
   }
   .zl-nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; }
   .zl-nav-links button {
@@ -608,20 +608,22 @@
   .zl-agent-card {
     background: #ffffff; border: 1px solid rgba(212,149,122,0.2); border-radius: 18px;
     overflow: hidden; box-shadow: 0 2px 12px rgba(45,42,38,0.06);
+    display: flex; flex-direction: column;
   }
-  .zl-agent-header { padding: 1rem 1.1rem; display: flex; align-items: center; gap: 0.8rem; }
+  .zl-agent-header { padding: 1.1rem 1.2rem; display: flex; align-items: center; gap: 0.8rem; }
   .zl-agent-header.sage { background: linear-gradient(135deg, #c8ddc6 0%, rgba(200,221,198,0.3) 100%); }
   .zl-agent-header.peach { background: linear-gradient(135deg, #fceee2 0%, rgba(252,238,226,0.3) 100%); }
   .zl-agent-icon {
-    width: 36px; height: 36px; min-width: 36px; border-radius: 50%;
+    width: 38px; height: 38px; min-width: 38px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    color: white; font-size: 18px;
+    color: white;
   }
+  .zl-agent-icon svg { width: 20px; height: 20px; overflow: visible; }
   .zl-agent-icon.sage { background: #8fae8b; }
   .zl-agent-icon.peach { background: #d4957a; }
   .zl-agent-header h3 { font-size: 0.92rem; font-weight: 600; color: #2d2a26; margin-bottom: 0.15rem; }
   .zl-agent-header p { font-size: 0.74rem; color: #5a554e; }
-  .zl-agent-body { padding: 0.8rem 1.1rem 1rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .zl-agent-body { padding: 1rem 1.2rem 1.2rem; display: flex; gap: 0.4rem; flex-wrap: wrap; flex: 1; }
   .zl-mini-badge { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 18px; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.3px; }
   .zl-mini-badge.green { background: #c8ddc6; color: #5f8a5c; }
   .zl-mini-badge.peach { background: #fceee2; color: #c07a5f; }
@@ -634,7 +636,14 @@
   .zl-live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5f8a5c; animation: pulse 2s infinite; }
   .zl-alert { display: flex; gap: 0.6rem; padding: 0.55rem 0; border-bottom: 1px solid rgba(212,149,122,0.2); font-size: 0.76rem; color: #5a554e; }
   .zl-alert:last-child { border-bottom: none; }
-  .zl-alert .a-icon { font-size: 14px; min-width: 18px; }
+  .zl-alert .a-icon {
+    min-width: 22px; width: 22px; height: 22px; border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .zl-alert .a-icon svg { width: 13px; height: 13px; overflow: visible; }
+  .zl-alert .a-icon.sage { background: rgba(143,174,139,0.18); color: #5f8a5c; }
+  .zl-alert .a-icon.peach { background: rgba(232,168,124,0.2); color: #c07a5f; }
+  .zl-alert .a-icon.coral { background: rgba(212,149,122,0.22); color: #c07a5f; }
   .zl-alert strong { color: #2d2a26; font-weight: 600; }
   .zl-sched-row { display: flex; justify-content: space-between; padding: 0.45rem 0; border-bottom: 1px solid rgba(212,149,122,0.2); font-size: 0.78rem; }
   .zl-sched-row:last-child { border-bottom: none; }
@@ -1308,7 +1317,10 @@
           <div class="blob blob-2"></div>
 
           <nav class="zl-nav">
-            <div class="zl-nav-logo">Zero<span class="lp">Loop</span> <span class="sub">FACILITIES</span></div>
+            <div class="zl-nav-logo">
+              <img src="zeroloop_logo.svg" alt="ZeroLoop">
+              <span class="sub">Facilities</span>
+            </div>
             <div class="zl-nav-links">
               <button class="active">Dashboard</button>
               <button>Building Map</button>
@@ -1342,7 +1354,9 @@
             <div class="zl-grid-2">
               <div class="zl-agent-card">
                 <div class="zl-agent-header sage">
-                  <div class="zl-agent-icon sage">⚙</div>
+                  <div class="zl-agent-icon sage">
+                    <svg viewBox="-1.5 -1.5 27 27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066-2.573c-.94-1.543.826-3.31 2.37-2.37 1 .608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </div>
                   <div>
                     <h3>Facility Waste Efficiency Agent</h3>
                     <p>Operations, scheduling, predictive maintenance</p>
@@ -1357,7 +1371,9 @@
               </div>
               <div class="zl-agent-card">
                 <div class="zl-agent-header peach">
-                  <div class="zl-agent-icon peach">👥</div>
+                  <div class="zl-agent-icon peach">
+                    <svg viewBox="-1.5 -1.5 27 27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  </div>
                   <div>
                     <h3>Workplace Engagement Agent</h3>
                     <p>Gamification, education, sustainability culture</p>
@@ -1375,9 +1391,9 @@
             <div class="zl-grid-2">
               <div class="zl-card">
                 <h3><span class="zl-live-dot"></span> Live Alerts</h3>
-                <div class="zl-alert"><span class="a-icon">📡</span><div><strong>Bin L2-04</strong> reaching 92% capacity. Collection scheduled.</div></div>
-                <div class="zl-alert"><span class="a-icon">⚠️</span><div><strong>Compactor B1</strong> sensor offline — diagnostic dispatched.</div></div>
-                <div class="zl-alert"><span class="a-icon">✅</span><div><strong>AIRS</strong> reconciled 18 invoices · 95% validation accuracy.</div></div>
+                <div class="zl-alert"><span class="a-icon peach"><svg viewBox="-1.5 -1.5 27 27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h2"/><path d="M5 8l-2 4 2 4"/><path d="M19 8l2 4-2 4"/><path d="M20 12h2"/><circle cx="12" cy="12" r="3"/></svg></span><div><strong>Bin L2-04</strong> reaching 92% capacity. Collection scheduled.</div></div>
+                <div class="zl-alert"><span class="a-icon coral"><svg viewBox="-1.5 -1.5 27 27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><div><strong>Compactor B1</strong> sensor offline — diagnostic dispatched.</div></div>
+                <div class="zl-alert"><span class="a-icon sage"><svg viewBox="-1.5 -1.5 27 27" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span><div><strong>AIRS</strong> reconciled 18 invoices · 95% validation accuracy.</div></div>
               </div>
               <div class="zl-card">
                 <h3>Today's Schedule</h3>
